@@ -3764,5 +3764,13 @@ export default {
   "Search foods & dishes": "Lebensmittel & Gerichte suchen",
   "Searching foods...": "Lebensmittel werden gesucht...",
   "per 100 g": "pro 100 g",
-  "USDA": "USDA"
+  "USDA": "USDA",
+  "History & analytics": "History & analytics",
+  "Last 30 days": "Last 30 days",
+  "Previous weeks": "Previous weeks",
+  "Days on target": "Days on target",
+  "Days over target": "Days over target",
+  "Daily average": "Daily average",
+  "No logged meals": "No logged meals",
+  "Wger": "Wger"
 }

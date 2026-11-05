@@ -2535,4 +2535,13 @@ export const PT_BR_OVERRIDES = {
   "per 100 g": "por 100 g",
 }
 
-export default { ...pt, ...PT_BR_OVERRIDES }
+export default { ...pt, ...PT_BR_OVERRIDES,
+  "History & analytics": "History & analytics",
+  "Last 30 days": "Last 30 days",
+  "Previous weeks": "Previous weeks",
+  "Days on target": "Days on target",
+  "Days over target": "Days over target",
+  "Daily average": "Daily average",
+  "No logged meals": "No logged meals",
+  "Wger": "Wger"
+}

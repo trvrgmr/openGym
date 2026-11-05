@@ -215,7 +215,7 @@ export function dayTotals(day) {
 /** Chronological daily intake window ending on `endISO` (default 7 days). */
 export function nutritionHistoryWindow(S, endISO, days = 7) {
   if (!ISO.test(String(endISO || ''))) return []
-  const count = Math.max(1, Math.min(31, Math.trunc(Number(days) || 7)))
+  const count = Math.max(1, Math.min(365, Math.trunc(Number(days) || 7)))
   const goals = nutritionGoalsOf(S)
   const out = []
   for (let i = count - 1; i >= 0; i--) {

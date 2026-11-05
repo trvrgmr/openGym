@@ -3744,5 +3744,13 @@ export default {
   "Search foods & dishes": "搜索食物与菜肴",
   "Searching foods...": "正在搜索食物...",
   "per 100 g": "每 100 克",
-  "USDA": "USDA"
+  "USDA": "USDA",
+  "History & analytics": "History & analytics",
+  "Last 30 days": "Last 30 days",
+  "Previous weeks": "Previous weeks",
+  "Days on target": "Days on target",
+  "Days over target": "Days over target",
+  "Daily average": "Daily average",
+  "No logged meals": "No logged meals",
+  "Wger": "Wger"
 }

@@ -107,13 +107,13 @@ describe('makeBackHandler', () => {
 // Tab history is not a parent page: Android must be able to leave from any root tab,
 // even after earlier navigation has left entries below it in the WebView.
 describe('back from a root tab', () => {
-  it.each(['/home', '/plan', '/stats', '/library', '/nutrition', '/stats/', '/PLAN', '/'])(
+  it.each(['/home', '/plan', '/stats', '/nutrition', '/stats/', '/PLAN', '/'])(
     'arms exit on %s even when the WebView can go back', pathname => {
       expect(decideBack({ pathname, canGoBack: true, exitArmed: false })).toBe('arm-exit')
       expect(decideBack({ pathname, canGoBack: true, exitArmed: true })).toBe('exit')
     })
 
-  it.each(['/plan/r/one', '/settings', '/settings/workout', '/history', '/workout', '/coach'])(
+  it.each(['/plan/r/one', '/settings', '/settings/workout', '/history', '/workout', '/coach', '/library'])(
     'still goes back from the child or workout page %s', pathname => {
       expect(decideBack({ pathname, canGoBack: true, exitArmed: false })).toBe('history')
     })

@@ -3744,5 +3744,13 @@ export default {
   "Search foods & dishes": "음식 및 요리 검색",
   "Searching foods...": "음식 검색 중...",
   "per 100 g": "100g당",
-  "USDA": "USDA"
+  "USDA": "USDA",
+  "History & analytics": "History & analytics",
+  "Last 30 days": "Last 30 days",
+  "Previous weeks": "Previous weeks",
+  "Days on target": "Days on target",
+  "Days over target": "Days over target",
+  "Daily average": "Daily average",
+  "No logged meals": "No logged meals",
+  "Wger": "Wger"
 }

@@ -23,6 +23,7 @@ import SwipeRow from '../components/SwipeRow.jsx'
 import NutritionFoodSheet, { deleteMealEntryWithUndo } from '../components/NutritionFoodSheet.jsx'
 import NutritionCustomFoodsSheet from '../components/NutritionCustomFoodsSheet.jsx'
 import NutritionGoalsSheet from '../components/NutritionGoalsSheet.jsx'
+import NutritionHistorySheet from '../components/NutritionHistorySheet.jsx'
 import { Button } from '../components/ui.jsx'
 
 const pctWidth = (val, goal) => {
@@ -122,6 +123,12 @@ export default function Nutrition() {
 
   const openCustomFoods = () => {
     useUI.getState().openSheet(close => <NutritionCustomFoodsSheet close={close} />)
+  }
+
+  const openHistory = () => {
+    useUI.getState().openSheet(close => (
+      <NutritionHistorySheet close={close} onSelectDate={setSelectedDate} />
+    ))
   }
 
   const openGoals = () => {
@@ -295,6 +302,17 @@ export default function Nutrition() {
           tint="var(--acc)"
           title={t('Last 7 days')}
           sub={loggedHist.length > 0 ? t('{0} kcal avg', fmtNum(avgKcal)) : t('Goal {0} kcal', fmtNum(goals.kcal))}
+          action={
+            <button
+              type="button"
+              className="iconbtn"
+              data-open-history
+              aria-label={t('History')}
+              onClick={openHistory}
+            >
+              <Icon name="chevronRight" />
+            </button>
+          }
         />
         <div className="nutr-hist-grid" role="group" aria-label={t('Last 7 days')}>
           {historyDays.map(d => {

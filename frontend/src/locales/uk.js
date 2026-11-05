@@ -3741,5 +3741,13 @@ export default {
   "Search foods & dishes": "Пошук продуктів і страв",
   "Searching foods...": "Пошук продуктів...",
   "per 100 g": "на 100 г",
-  "USDA": "USDA"
+  "USDA": "USDA",
+  "History & analytics": "History & analytics",
+  "Last 30 days": "Last 30 days",
+  "Previous weeks": "Previous weeks",
+  "Days on target": "Days on target",
+  "Days over target": "Days over target",
+  "Daily average": "Daily average",
+  "No logged meals": "No logged meals",
+  "Wger": "Wger"
 }

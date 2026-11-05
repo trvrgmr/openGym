@@ -3744,5 +3744,13 @@ export default {
   "Search foods & dishes": "Besin veya yemek ara",
   "Searching foods...": "Besin aranıyor...",
   "per 100 g": "100 g başına",
-  "USDA": "USDA"
+  "USDA": "USDA",
+  "History & analytics": "Tarihsel İstatistik & Geçmiş",
+  "Last 30 days": "Son 30 gün",
+  "Previous weeks": "Önceki haftalar",
+  "Days on target": "Hedefte kalınan günler",
+  "Days over target": "Hedef aşımı günler",
+  "Daily average": "Günlük ortalama",
+  "No logged meals": "Kayıtlı öğün yok",
+  "Wger": "Wger"
 }

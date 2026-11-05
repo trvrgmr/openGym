@@ -6,7 +6,9 @@ import {
   getCachedFood,
   lookupBarcode,
   normalizeOffProduct,
+  normalizeWgerProduct,
   searchExternalFoods,
+  searchWger,
 } from './food-lookup.js'
 
 describe('food-lookup: external & local lookup client', () => {
@@ -60,7 +62,25 @@ describe('food-lookup: external & local lookup client', () => {
         protein: 6.2,
         carbs: 9.4,
         fat: 6.6,
+        image: null,
       })
+    })
+
+    it('preserves English/original product name without forcing Turkish translation', () => {
+      const raw = {
+        code: '112233',
+        product_name: 'Rolled Oats',
+        product_name_en: 'Rolled Oats',
+        product_name_tr: 'Yulaf Ezmesi',
+        nutriments: {
+          'energy-kcal_100g': 370,
+          proteins_100g: 13,
+          carbohydrates_100g: 62,
+          fat_100g: 7,
+        },
+      }
+      const norm = normalizeOffProduct(raw)
+      expect(norm.name).toBe('Rolled Oats')
     })
 
     it('falls back to energy_100g in kJ if energy-kcal_100g is missing', () => {
@@ -76,6 +96,79 @@ describe('food-lookup: external & local lookup client', () => {
       }
       const norm = normalizeOffProduct(raw)
       expect(norm.per100g.kcal).toBe(200)
+    })
+  })
+
+  describe('normalizeWgerProduct', () => {
+    it('returns null for null, undefined or nameless items', () => {
+      expect(normalizeWgerProduct(null)).toBeNull()
+      expect(normalizeWgerProduct({})).toBeNull()
+      expect(normalizeWgerProduct({ name: '' })).toBeNull()
+    })
+
+    it('correctly maps Wger ingredient fields to OpenGym schema', () => {
+      const raw = {
+        id: 2483247,
+        name: 'chicken breast',
+        brand: 'Tewco',
+        code: '5059697724916',
+        energy: 175,
+        protein: '26.700',
+        carbohydrates: '0.100',
+        fat: '7.500',
+      }
+      const norm = normalizeWgerProduct(raw)
+      expect(norm).toEqual({
+        id: 'wger:2483247',
+        source: 'wger',
+        barcode: '5059697724916',
+        name: 'chicken breast',
+        brand: 'Tewco',
+        serving: '100 g',
+        gramsPerServing: 100,
+        per100g: {
+          kcal: 175,
+          protein: 26.7,
+          carbs: 0.1,
+          fat: 7.5,
+        },
+        kcal: 175,
+        protein: 26.7,
+        carbs: 0.1,
+        fat: 7.5,
+      })
+    })
+  })
+
+  describe('searchWger', () => {
+    it('returns empty array on empty query', async () => {
+      const res = await searchWger('')
+      expect(res).toEqual([])
+    })
+
+    it('fetches and normalizes ingredients from Wger API', async () => {
+      const fakeWger = {
+        results: [
+          {
+            id: 101,
+            name: 'Brown rice',
+            energy: 360,
+            protein: '7.5',
+            carbohydrates: '76.0',
+            fat: '2.5',
+          },
+        ],
+      }
+      vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+        ok: true,
+        json: async () => fakeWger,
+      })
+
+      const hits = await searchWger('brown rice')
+      expect(hits).toHaveLength(1)
+      expect(hits[0].name).toBe('Brown rice')
+      expect(hits[0].source).toBe('wger')
+      expect(hits[0].kcal).toBe(360)
     })
   })
 
@@ -141,7 +234,7 @@ describe('food-lookup: external & local lookup client', () => {
     })
 
     it('returns null gracefully if not found or fetch fails', async () => {
-      vi.spyOn(globalThis, 'fetch').mockRejectedValueOnce(new Error('Network error'))
+      vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Network error'))
       const res = await lookupBarcode('9999999', [])
       expect(res).toBeNull()
     })
@@ -153,7 +246,19 @@ describe('food-lookup: external & local lookup client', () => {
       expect(res).toEqual([])
     })
 
-    it('searches built-in foods immediately and queries Diyetkolik, USDA & OFF in parallel', async () => {
+    it('searches built-in foods immediately and queries Wger, OFF, USDA in priority order', async () => {
+      const fakeWgerResult = {
+        results: [
+          {
+            id: 888,
+            name: 'Wger Chicken Breast',
+            energy: 165,
+            protein: '31',
+            carbohydrates: '0',
+            fat: '3.6',
+          },
+        ],
+      }
       const fakeDkResult = {
         results: [
           {
@@ -197,6 +302,9 @@ describe('food-lookup: external & local lookup client', () => {
       }
 
       vi.spyOn(globalThis, 'fetch').mockImplementation(async url => {
+        if (url.includes('wger.de')) {
+          return { ok: true, json: async () => fakeWgerResult }
+        }
         if (url.includes('/api/nutrition/diyetkolik')) {
           return { ok: true, json: async () => fakeDkResult }
         }
@@ -209,11 +317,11 @@ describe('food-lookup: external & local lookup client', () => {
         return { ok: false }
       })
 
-      const results = await searchExternalFoods('ezogelin')
+      const results = await searchExternalFoods('chicken')
       expect(results.length).toBeGreaterThanOrEqual(1)
-      expect(results.some(r => r.source === 'diyetkolik')).toBe(true)
-      expect(results.some(r => r.source === 'usda')).toBe(true)
+      expect(results.some(r => r.source === 'wger')).toBe(true)
       expect(results.some(r => r.source === 'openfoodfacts')).toBe(true)
+      expect(results.some(r => r.source === 'usda')).toBe(true)
     })
 
     it('handles network failure in external sources gracefully and falls back to built-in items', async () => {
@@ -226,16 +334,18 @@ describe('food-lookup: external & local lookup client', () => {
   })
 
   describe('foodApiService', () => {
-    it('exports Open Food Facts and USDA service methods', () => {
+    it('exports Open Food Facts, Wger and USDA service methods', () => {
       expect(typeof foodApiService.searchOpenFoodFacts).toBe('function')
       expect(typeof foodApiService.lookupBarcodeOpenFoodFacts).toBe('function')
+      expect(typeof foodApiService.searchWger).toBe('function')
+      expect(typeof foodApiService.normalizeWgerProduct).toBe('function')
       expect(typeof foodApiService.searchUsda).toBe('function')
       expect(typeof foodApiService.searchExternalFoods).toBe('function')
       expect(typeof foodApiService.lookupBarcode).toBe('function')
     })
 
-    it('searchOpenFoodFacts sends request with OpenGymCustom/1.0 User-Agent', async () => {
-      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+    it('searchOpenFoodFacts sends request with OpenGymTracker-Android/1.0 (contact: info@opengym.local) User-Agent', async () => {
+      const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation(async () => ({
         ok: true,
         json: async () => ({
           products: [{
@@ -244,13 +354,13 @@ describe('food-lookup: external & local lookup client', () => {
             nutriments: { 'energy-kcal_100g': 350, proteins_100g: 30, carbohydrates_100g: 30, fat_100g: 10 },
           }],
         }),
-      })
+      }))
 
       const hits = await foodApiService.searchOpenFoodFacts('protein bar')
       expect(fetchSpy).toHaveBeenCalledWith(
         expect.stringContaining('world.openfoodfacts.org/cgi/search.pl'),
         expect.objectContaining({
-          headers: { 'User-Agent': 'OpenGymCustom/1.0' },
+          headers: { 'User-Agent': 'OpenGymTracker-Android/1.0 (contact: info@opengym.local)' },
         })
       )
       expect(hits).toHaveLength(1)

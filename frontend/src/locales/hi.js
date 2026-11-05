@@ -3744,5 +3744,13 @@ export default {
   "Search foods & dishes": "भोजन और व्यंजन खोजें",
   "Searching foods...": "भोजन खोजा जा रहा है...",
   "per 100 g": "प्रति 100 ग्राम",
-  "USDA": "USDA"
+  "USDA": "USDA",
+  "History & analytics": "History & analytics",
+  "Last 30 days": "Last 30 days",
+  "Previous weeks": "Previous weeks",
+  "Days on target": "Days on target",
+  "Days over target": "Days over target",
+  "Daily average": "Daily average",
+  "No logged meals": "No logged meals",
+  "Wger": "Wger"
 }
