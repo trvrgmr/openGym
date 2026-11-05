@@ -19,6 +19,8 @@ const P = {
   house: <path d="M3.5 10.7 12 3.8l8.5 6.9M5.9 9.4V19a1.4 1.4 0 0 0 1.4 1.4h9.4A1.4 1.4 0 0 0 18.1 19V9.4" />,
   calendar: <><rect x="3.4" y="5.2" width="17.2" height="15.4" rx="3.2" /><path d="M8.2 3.4v3.4M15.8 3.4v3.4M3.4 10.2h17.2" /></>,
   chart: <path d="M4.5 20.2V13M9.5 20.2V6.4M14.5 20.2v-5.1M19.5 20.2V9.6" />,
+  nutrition: <><path d="M12 7.5c-1.5-1.2-4.2-1.3-5.8.5-2.1 2.4-1.9 7.1.3 10.3 1 1.4 2.2 2.2 3.4 2.2.8 0 1.4-.5 2.1-.5s1.3.5 2.1.5c1.2 0 2.4-.8 3.4-2.2 2.2-3.2 2.4-7.9.3-10.3-1.6-1.8-4.3-1.7-5.8-.5Z" /><path d="M12 7.5c.1-1.7.9-3.1 2.5-4" /></>,
+  utensils: <path d="M6.5 4v5.5a2.5 2.5 0 0 0 5 0V4M9 4v16.5M17.5 4v16.5M17.5 4c-2.2 1.5-3 3.8-3 6.5h3" />,
   magnifier: <><circle cx="11" cy="11" r="7" /><path d="m20.5 20.5-4.4-4.4" /></>,
   // A real cog outline (8 teeth, generated on a circle) — an earlier version drew
   // radial rays and was indistinguishable from `sun` at tab-bar size.

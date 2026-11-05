@@ -5,7 +5,7 @@ For people, the same map with diagrams is [docs/ARCHITECTURE.md](docs/ARCHITECTU
 
 ## What this is
 
-openGym is a self-hosted gym and body-weight tracker. Two containers (`api` + `web`) plus a
+openGym is a self-hosted gym, body-weight, and calorie/macro tracker. Two containers (`api` + `web`) plus a
 `./data` folder the user owns: no third-party account, no telemetry. Passkey (WebAuthn) login,
 installable as a PWA, and Capacitor apps for Android and iPhone (with an Apple Watch app and
 widgets) that work on their own or synced to a server. License: AGPL-3.0-or-later; the exercise
@@ -69,6 +69,8 @@ pushes `main` and `v*` tags to the GitLab mirror (fast-forward only, never push 
 Pull requests are gated by `.github/workflows/test.yml`; `ios.yml` compiles the iPhone app on a Mac
 runner. Release packages (APK, Play bundle, App Store IPA) are built and signed on the release
 machine, never in CI (see "Exercise media" below and docs/APP_STORES.md).
+For this custom fork, Android APK builds are automated in GitHub Actions via `.github/workflows/build-apk.yml`
+with application ID `com.opengym.custom` so it installs side-by-side with original OpenGym.
 
 ## Architecture
 
@@ -109,10 +111,20 @@ machine, never in CI (see "Exercise media" below and docs/APP_STORES.md).
   Once values exist, the unit selector permits cm/in or kg/lb conversions within the recorded
   type; a different type needs a new field. The body CSV names a custom column with its unit,
   "Muscle ratio (%)", and the importer reads those columns back (only from our own header).
-- **`views/`**: one file per screen, routed by `react-router-dom` from `App.jsx`.
+- **Nutrition & Calorie Tracker (`views/Nutrition.jsx`, `lib/nutrition.js`, `lib/foods-catalogue.js`, `lib/food-lookup.js`)**:
+  - Persistent state in `useStore`:
+    - `nutritionLogs`: date-keyed map (`YYYY-MM-DD`) with 4 meal buckets (`breakfast`, `lunch`, `dinner`, `snack`). Each entry holds `name`, `serving` (e.g. '100 g'), `gramsPerServing`, `servings` count, `kcal`, `protein`, `carbs`, `fat`, and optional `source` / `code`.
+    - `nutritionGoals`: daily target calories and macro grams (`kcal`, `protein`, `carbs`, `fat`).
+    - `customFoods`: user-created foods or auto-cached items saved on logging (`id`, `name`, `serving`, `gramsPerServing`, `kcal`, `protein`, `carbs`, `fat`).
+  - Domain helpers in `lib/`:
+    - `nutrition.js`: pure calculators for meal totals, day totals, macro split percentages, and goal comparisons.
+    - `foods-catalogue.js` & `default_foods.json`: 100 essential Turkish and fitness/bodybuilding staples (raw & cooked meats, grains, dairy, fats) for 0-latency offline search.
+    - `food-lookup.js`: multi-source food search connecting Open Food Facts (`search.pl`, barcode API with `User-Agent: OpenGymCustom/1.0`) and USDA FoodData Central (with fallback and custom API key support). Includes 300ms debounce, graceful offline fallback, and auto-caching to `customFoods` and local LRU storage (`gym_food_cache_v1`).
+  - Sheets: `components/NutritionFoodSheet.jsx` (food lookup & logging), `components/NutritionGoalsSheet.jsx` (goal editing), and `components/NutritionCustomFoodsSheet.jsx` (managing custom food entries).
+- **`views/`**: one file per screen, routed by `react-router-dom` from `App.jsx` (including `#/nutrition`).
 - **`sheets.jsx`**: the bottom sheets (exercise picker, exercise config, workout detail, plan
   import...). It is large; a new sheet can go into `components/` as its own file.
-- **`components/`**: shared UI (charts, modals, timers, media).
+- **`components/`**: shared UI (charts, modals, timers, media, TabBar).
 - **`locales/`**: one i18n pack per language, keyed by the English string (`lib/i18n.js`,
   `i18n-core.js`). A new `t()` string goes into every pack; pt-BR inherits from pt and has a
   fingerprint test (`scripts/pt-br-inheritance-fingerprint.mjs`).
@@ -120,8 +132,8 @@ machine, never in CI (see "Exercise media" below and docs/APP_STORES.md).
 ### API (`api/server.js`)
 
 Plain `node:http`, no framework. Requests are dispatched through a `routes` object keyed by
-`'METHOD /path'` (e.g. `routes['GET /api/health']`); add an endpoint by adding a key and its entry
-in `openapi.yaml` (`openapi-routes.test.js` compares them). State is JSON under `DATA_DIR`:
+`'METHOD /path'` (e.g. `routes['GET /api/health']`, `routes['GET /api/nutrition/search']`, `routes['GET /api/nutrition/usda']`);
+add an endpoint by adding a key and its entry in `openapi.yaml` (`openapi-routes.test.js` compares them). State is JSON under `DATA_DIR`:
 `db.json` (users, credentials, push subscriptions, invites) and `state-<uid>.json` per user,
 written temp-then-rename (`durable.js`). Custom-exercise photos and videos live in
 `DATA_DIR/uploads` (`media.js`). Auth is WebAuthn passkeys (`@simplewebauthn/server`), an optional
@@ -136,14 +148,15 @@ drives rest-timer and reminder notifications.
 Each profile is one document with a server revision. A device PUTs with the revision it last saw;
 if another device wrote in between, the server answers 409 with the current document and the
 client merges (`lib/sync-merge.js`) and retries. Every change carries its own stamp, per setting
-and per field, so the newest edit of each wins and deletions stay deleted.
+and per field, so the newest edit of each wins and deletions stay deleted. `nutritionLogs` is
+governed by `STAMPED_MAPS` (per-day merge), while `customFoods` is governed by `ENTRY_LISTS` / `DEL_LISTS`.
 
 ### Code that exists twice on purpose
 
 The API image cannot import the frontend, so some rules are hand-copied. Change both sides
-together: `lib/sync-merge.js` and `api/sync-stamps.js` (parity test), `lib/glyphs.js` and
-`api/coach/core/glyphs.js` (parity test), `lib/nudge.js` and `api/nudge.js`, `lib/queue.js` and
-`api/queue.js` (mirrored test cases only, nothing compares the code). The other way round,
+together: `lib/sync-merge.js` and `api/sync-stamps.js` (parity test, including `nutritionLogs` and `customFoods`),
+`lib/glyphs.js` and `api/coach/core/glyphs.js` (parity test), `lib/nudge.js` and `api/nudge.js`,
+`lib/queue.js` and `api/queue.js` (mirrored test cases only, nothing compares the code). The other way round,
 `lib/coach-local.js` imports `api/coach/core/` directly so the phones run the same coach pipeline.
 
 ### MCP server (`mcp/src`)

@@ -27,6 +27,7 @@ import { loadCoachDevice, saveCoachDevice, coachDeviceSettings } from '../lib/co
 import { initCoachSchedule } from '../lib/coach-schedule.js'
 import { RTL_LANGS } from '../lib/i18n-core.js'
 import { DEFAULT_TEMPLATE_ID } from '../lib/structuralBalanceTemplates.js'
+import { DEFAULT_NUTRITION_GOALS, hasNutritionData } from '../lib/nutrition.js'
 
 import { WC_DEFAULT } from '../lib/workout-controls.js'
 import { sanitizeAccent } from '../lib/accent.js'
@@ -277,6 +278,11 @@ export const DEF = {
   // cleared) replaces that role's curated exercise-id whitelist with a single user-chosen
   // exercise id; the stamp is what lets a sync keep the choice made last (lib/sync-merge.js).
   balanceTemplate: DEFAULT_TEMPLATE_ID, balanceOverrides: {},
+  // Calorie & Macro Tracker (lib/nutrition.js, views/Nutrition.jsx): daily targets, per-day meal
+  // logs ({ [iso]: { meals, _ts } }), and saved/frequent custom foods ([{ id, name, …, _ts }]).
+  nutritionGoals: { ...DEFAULT_NUTRITION_GOALS },
+  nutritionLogs: {},
+  customFoods: [],
 }
 const clone = o => JSON.parse(JSON.stringify(o))
 
@@ -364,7 +370,7 @@ function loadState() {
 // weigh-ins and custom exercises. A custom exercise is all a new guest may have made — with its
 // photo or video, which the server counts as unreferenced until the state that names it lands —
 // so a profile created from such a copy takes it at once, like one holding a workout.
-const hasData = st => !!((st.workouts || []).length || (st.routines || []).length || (st.bodyweight || []).length || (st.customEx || []).length || (st.measurements || []).length || Object.values(st.exAliases || {}).some(v => Array.isArray(v) && v.length))
+const hasData = st => !!((st.workouts || []).length || (st.routines || []).length || (st.bodyweight || []).length || (st.customEx || []).length || (st.measurements || []).length || Object.values(st.exAliases || {}).some(v => Array.isArray(v) && v.length) || hasNutritionData(st))
 
 // Decide whether a pulled account state may replace the local saved state. A local active workout
 // is deliberately carried forward: the server stores completed/saved state, while the in-progress

@@ -232,6 +232,67 @@ paths:
                   writable: { type: boolean, const: false }
               example: { ok: false, writable: false }
 
+  /api/nutrition/diyetkolik:
+    get:
+      tags: [meta]
+      operationId: searchDiyetkolik
+      summary: Diyetkolik food library proxy search
+      description: |
+        Proxy endpoint for searching Turkish foods and dishes on Diyetkolik without
+        client-side CORS restrictions.
+      security: []
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Food search query
+      responses:
+        '200':
+          description: Search results from Diyetkolik
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query: { type: string }
+                  results:
+                    type: array
+                    items:
+                      type: object
+              example: { query: "ezogelin", results: [] }
+
+  /api/nutrition/usda:
+    get:
+      tags: [meta]
+      operationId: searchUsda
+      summary: USDA FoodData Central proxy search
+      description: |
+        Proxy endpoint for searching verified whole and raw foods from USDA FoodData
+        Central Foundation and SR Legacy databases.
+      security: []
+      parameters:
+        - name: q
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Food search query
+      responses:
+        '200':
+          description: Search results from USDA
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+              example: { results: [] }
+
   /api/config:
     get:
       tags: [meta]

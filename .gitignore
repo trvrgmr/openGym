@@ -18,6 +18,7 @@ node_modules
 .claude/
 .agents/
 .superpowers/
+skills/
 
 # Nix build result symlinks
 result

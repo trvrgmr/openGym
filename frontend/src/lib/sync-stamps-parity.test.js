@@ -3,22 +3,41 @@
    its own changes (an older app, an API planner) must hold in this side's merge. */
 import { describe, expect, it } from 'vitest'
 import * as S from '../../../api/sync-stamps.js'
-import { highestStamp, mergeDeletions, mergeEdits, mergeStates, stampChange, stampEntry, stampEdits, stampRestore } from './sync-merge.js'
+import { STAMPED_MAPS, highestStamp, mergeDeletions, mergeEdits, mergeStates, stampChange, stampEntry, stampEdits, stampRestore } from './sync-merge.js'
 
 const clone = v => JSON.parse(JSON.stringify(v))
 function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 4294967296 } }
 
 describe('api/sync-stamps.js matches sync-merge.js', () => {
+  it('keeps STAMPED_MAPS and DEL_LISTS keys aligned including nutritionLogs and customFoods', () => {
+    expect(S.STAMPED_MAPS).toEqual(STAMPED_MAPS)
+    expect(S.STAMPED_MAPS).toContain('nutritionLogs')
+    expect(Object.keys(S.DEL_LISTS)).toContain('customFoods')
+  })
+
   it('on random records and entries', () => {
     for (let seed = 1; seed < 300; seed++) {
       const R = rng(seed)
       const n = () => Math.floor(R() * 1000) * (R() < 0.3 ? -1 : 1)
-      const recs = () => ({ workouts: { a: n(), b: n() }, favEx: { x: n() }, bodyweight: R() < 0.5 ? { '2026-10-01': n() } : undefined })
+      const recs = () => ({
+        workouts: { a: n(), b: n() },
+        favEx: { x: n() },
+        customFoods: R() < 0.5 ? { cf1: n() } : undefined,
+        bodyweight: R() < 0.5 ? { '2026-10-01': n() } : undefined,
+      })
       const a = recs(), b = recs()
       expect(S.mergeDeletions(a, b)).toEqual(mergeDeletions(a, b))
-      const ea = { restSec: n(), 'week.1': n() }, eb = { restSec: n(), queue: n() }
+      const ea = { restSec: n(), 'week.1': n(), nutritionGoals: n() }, eb = { restSec: n(), queue: n() }
       expect(S.mergeEdits(ea, eb)).toEqual(mergeEdits(ea, eb))
-      const doc = { _ts: n(), edited: ea, deleted: a, routines: [{ id: 'r', _ts: n(), _f: { name: n() } }], plates: { kg: { _ts: n() } } }
+      const doc = {
+        _ts: n(),
+        edited: ea,
+        deleted: a,
+        routines: [{ id: 'r', _ts: n(), _f: { name: n() } }],
+        customFoods: [{ id: 'cf1', _ts: n(), _f: { kcal: n() } }],
+        plates: { kg: { _ts: n() } },
+        nutritionLogs: { '2026-11-05': { _ts: n() } },
+      }
       expect(S.highestStamp(doc)).toBe(highestStamp(doc))
       const old = { id: 'r', name: 'A', ex: [1], _f: { ex: 5 }, ...(R() < 0.5 ? { _u: { ex: [1, 5, 5] } } : {}) }
       const x = { id: 'r', name: R() < 0.5 ? 'A' : 'B', ex: [1, R() < 0.5 ? 2 : 1], ...(R() < 0.3 ? { _u: { name: [0, 4], ex: [1, 5, 5] } } : {}) }
@@ -134,4 +153,3 @@ describe('the write ids are no setting', () => {
     expect(Object.keys(stampRestore({ _wid: 'b', _wids: ['a'], restSec: 60 }, [], 9).edited)).not.toContain('_wid')
   })
 })
-

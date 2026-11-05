@@ -2076,9 +2076,167 @@ function dataWritable() {
 }
 
 const routes = {
+  // Nutrition external library search proxy (Diyetkolik & food lookup)
+  'GET /api/nutrition/diyetkolik': async (req, res) => {
+    const url = new URL(req.url, 'http://localhost');
+    const q = text(url.searchParams.get('q')).trim();
+    if (!q) return json(res, 200, { results: [] });
+    try {
+      const slugTerm = encodeURIComponent(
+        q.toLowerCase()
+          .replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u')
+          .replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c')
+          .replace(/[^a-z0-9]+/g, '-')
+      );
+      const searchUrl = 'https://www.diyetkolik.com/kac-kalori/arama/' + slugTerm;
+      const upstream = await fetch(searchUrl, {
+        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+        signal: AbortSignal.timeout(6000)
+      });
+      if (!upstream.ok) return json(res, 200, { results: [] });
+      const html = await upstream.text();
+      const slugs = [...new Set([...html.matchAll(/\/kac-kalori\/([a-z0-9-]+)/g)].map(m => m[1]))]
+        .filter(s => s !== 'arama' && s !== 'page' && !s.startsWith('arama-') && s !== 'kac-kalori')
+        .slice(0, 6);
+
+      const num = s => (s ? Number(s.replace(',', '.')) : 0);
+      const items = await Promise.all(slugs.map(async slug => {
+        try {
+          const itemRes = await fetch('https://www.diyetkolik.com/kac-kalori/' + slug, {
+            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+            signal: AbortSignal.timeout(4000)
+          });
+          if (!itemRes.ok) return null;
+          const itemHtml = await itemRes.text();
+          const titleMatch = itemHtml.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i) || itemHtml.match(/<title>([\s\S]*?)<\/title>/i);
+          const name = titleMatch ? titleMatch[1].replace(/Kaç Kalori\??[\s\S]*/i, '').replace(/<[^>]+>/g, '').trim() : slug;
+          const m100 = itemHtml.match(/100\s*gramında\s*(\d+(?:[.,]\d+)?)\s*kalori/i);
+          const mCarb = itemHtml.match(/(\d+(?:[.,]\d+)?)\s*gram\s*karbonhidrat/i);
+          const mProt = itemHtml.match(/(\d+(?:[.,]\d+)?)\s*gram\s*protein/i);
+          const mFat = itemHtml.match(/(\d+(?:[.,]\d+)?)\s*gram\s*yağ/i);
+          const mPor = itemHtml.match(/1\s*porsiyonu?\s*\(\s*(\d+(?:[.,]\d+)?)\s*g[r]?\s*\)\s*(\d+(?:[.,]\d+)?)\s*kalori/i);
+
+          const kcal100 = num(m100?.[1]);
+          const carb100 = num(mCarb?.[1]);
+          const prot100 = num(mProt?.[1]);
+          const fat100 = num(mFat?.[1]);
+          if (!name || (kcal100 === 0 && carb100 === 0 && prot100 === 0 && fat100 === 0)) return null;
+
+          const portionGrams = num(mPor?.[1]) || null;
+          const portionKcal = num(mPor?.[2]) || null;
+          return {
+            id: 'dk:' + slug,
+            source: 'diyetkolik',
+            name,
+            serving: portionGrams ? `1 porsiyon (${portionGrams} g)` : '100 g',
+            gramsPerServing: portionGrams || 100,
+            per100g: {
+              kcal: Math.round(kcal100),
+              protein: Math.round(prot100 * 10) / 10,
+              carbs: Math.round(carb100 * 10) / 10,
+              fat: Math.round(fat100 * 10) / 10,
+            },
+            kcal: Math.round(portionKcal || kcal100),
+            protein: Math.round((portionGrams ? (prot100 * portionGrams / 100) : prot100) * 10) / 10,
+            carbs: Math.round((portionGrams ? (carb100 * portionGrams / 100) : carb100) * 10) / 10,
+            fat: Math.round((portionGrams ? (fat100 * portionGrams / 100) : fat100) * 10) / 10,
+          };
+        } catch {
+          return null;
+        }
+      }));
+      json(res, 200, { results: items.filter(Boolean) });
+    } catch {
+      json(res, 200, { results: [] });
+    }
+  },
   // 503 rather than a flag in a 200: the container healthcheck is `wget --spider`, which reads
   // the status and nothing else, and an instance that cannot write its data directory is exactly
   // what "unhealthy" is for. The 200 keeps the shape it had, plus the flag it is now asserting.
+  // USDA FoodData Central search proxy for verified raw & whole foods
+  'GET /api/nutrition/usda': async (req, res) => {
+    const url = new URL(req.url, "http://localhost");
+    const q = text(url.searchParams.get("q")).trim();
+    if (!q) return json(res, 200, { results: [] });
+
+    const queryEn = q.toLowerCase()
+      .replace(/tavuk\s*göğsü|tavuk\s*gogsu/g, "chicken breast")
+      .replace(/tavuk\s*but/g, "chicken thigh")
+      .replace(/tavuk/g, "chicken")
+      .replace(/hindi\s*göğsü|hindi\s*gogsu/g, "turkey breast")
+      .replace(/hindi/g, "turkey")
+      .replace(/çiğ|cig/g, "raw")
+      .replace(/pişmiş|pismis/g, "cooked")
+      .replace(/dana\s*kıyma|dana\s*kiyma/g, "ground beef")
+      .replace(/dana\s*antrikot/g, "ribeye steak")
+      .replace(/dana\s*bonfile/g, "beef tenderloin")
+      .replace(/dana/g, "beef")
+      .replace(/kuzu/g, "lamb")
+      .replace(/somon/g, "salmon")
+      .replace(/ton\s*balığı|ton\s*baligi/g, "tuna")
+      .replace(/karides/g, "shrimp")
+      .replace(/pirinç|pirinc/g, "rice")
+      .replace(/yulaf/g, "oats")
+      .replace(/makarna/g, "pasta")
+      .replace(/mercimek/g, "lentils")
+      .replace(/nohut/g, "chickpeas")
+      .replace(/fasulye/g, "beans")
+      .replace(/patates/g, "potato")
+      .replace(/brokoli/g, "broccoli")
+      .replace(/ıspanak|ispanak/g, "spinach")
+      .replace(/yumurta/g, "egg")
+      .replace(/badem/g, "almonds")
+      .replace(/ceviz/g, "walnuts")
+      .replace(/fındık|findik/g, "hazelnuts");
+
+    try {
+      const usdaUrl = "https://api.nal.usda.gov/fdc/v1/foods/search?query=" + encodeURIComponent(queryEn) + "&dataType=Foundation,SR%20Legacy&pageSize=6&api_key=DEMO_KEY";
+      const fdcRes = await fetch(usdaUrl, {
+        headers: { "User-Agent": "openGym-Nutrition-Module/1.0" },
+        signal: AbortSignal.timeout(4000)
+      });
+      if (!fdcRes.ok) return json(res, 200, { results: [] });
+      const data = await fdcRes.json();
+      const foods = Array.isArray(data.foods) ? data.foods : [];
+      const results = [];
+
+      for (const item of foods) {
+        if (!item.description) continue;
+        const nutrients = Array.isArray(item.foodNutrients) ? item.foodNutrients : [];
+        let kcal = 0, protein = 0, carbs = 0, fat = 0;
+
+        for (const n of nutrients) {
+          const name = (n.nutrientName || "").toLowerCase();
+          if (name.includes("energy") && (n.unitName === "KCAL" || !kcal)) {
+            kcal = Math.round(Number(n.value) || 0);
+          } else if (name === "protein") {
+            protein = Math.round((Number(n.value) || 0) * 10) / 10;
+          } else if (name.includes("carbohydrate")) {
+            carbs = Math.round((Number(n.value) || 0) * 10) / 10;
+          } else if (name.includes("total lipid") || name === "fat") {
+            fat = Math.round((Number(n.value) || 0) * 10) / 10;
+          }
+        }
+
+        results.push({
+          id: "usda:" + item.fdcId,
+          source: "usda",
+          name: item.description,
+          serving: "100 g",
+          gramsPerServing: 100,
+          per100g: { kcal, protein, carbs, fat },
+          kcal,
+          protein,
+          carbs,
+          fat
+        });
+      }
+
+      json(res, 200, { results });
+    } catch {
+      json(res, 200, { results: [] });
+    }
+  },
   'GET /api/health': async (req, res) => {
     if (!dataWritable()) return json(res, 503, { ok: false, writable: false });
     json(res, 200, { ok: true, users: db.users.length, writable: true });

@@ -1,0 +1,2004 @@
+[
+  {
+    "id": "cat:bal",
+    "name": "Bal (Süzme Çiçek)",
+    "nameEn": "Honey",
+    "per100g": {
+      "kcal": 304,
+      "protein": 0.3,
+      "carbs": 82.4,
+      "fat": 0
+    },
+    "serving": "1 tatlı kaşığı (10 g)",
+    "gramsPerServing": 10,
+    "category": "other",
+    "tags": [
+      "bal",
+      "honey",
+      "tatli"
+    ]
+  },
+  {
+    "id": "cat:kakao-tozu",
+    "name": "Kakao Tozu (Ham, Şekersiz)",
+    "nameEn": "Raw Cocoa Powder (Unsweetened)",
+    "per100g": {
+      "kcal": 228,
+      "protein": 19.6,
+      "carbs": 13.7,
+      "fat": 13.7
+    },
+    "serving": "1 tatlı kaşığı (5 g)",
+    "gramsPerServing": 5,
+    "category": "other",
+    "tags": [
+      "kakao",
+      "cocoa",
+      "toz"
+    ]
+  },
+  {
+    "id": "cat:tavuk-gogsu-cig",
+    "name": "Tavuk Göğsü (Çiğ)",
+    "nameEn": "Chicken Breast (Raw)",
+    "per100g": {
+      "kcal": 110,
+      "protein": 23.1,
+      "carbs": 0,
+      "fat": 1.2
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "gogus",
+      "cig",
+      "chicken",
+      "breast",
+      "raw",
+      "protein",
+      "fileto"
+    ]
+  },
+  {
+    "id": "cat:tavuk-but-cig-derisiz",
+    "name": "Tavuk But / Pirzola (Çiğ, Derisiz)",
+    "nameEn": "Chicken Thigh (Skinless, Raw)",
+    "per100g": {
+      "kcal": 120,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 4.5
+    },
+    "serving": "1 adet (120 g)",
+    "gramsPerServing": 120,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "but",
+      "pirzola",
+      "derisiz",
+      "cig",
+      "raw",
+      "chicken",
+      "thigh"
+    ]
+  },
+  {
+    "id": "cat:tavuk-but-cig-derili",
+    "name": "Tavuk But (Çiğ, Derili)",
+    "nameEn": "Chicken Thigh (Bone-in, Skin-on, Raw)",
+    "per100g": {
+      "kcal": 215,
+      "protein": 17,
+      "carbs": 0,
+      "fat": 15.5
+    },
+    "serving": "1 adet (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "but",
+      "derili",
+      "cig",
+      "raw"
+    ]
+  },
+  {
+    "id": "cat:tavuk-kanat-cig",
+    "name": "Tavuk Kanat (Çiğ)",
+    "nameEn": "Chicken Wings (Raw)",
+    "per100g": {
+      "kcal": 191,
+      "protein": 18.5,
+      "carbs": 0,
+      "fat": 13
+    },
+    "serving": "1 adet (40 g)",
+    "gramsPerServing": 40,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "kanat",
+      "cig",
+      "raw",
+      "chicken",
+      "wings"
+    ]
+  },
+  {
+    "id": "cat:tavuk-ciger-cig",
+    "name": "Tavuk Ciğeri (Çiğ)",
+    "nameEn": "Chicken Liver (Raw)",
+    "per100g": {
+      "kcal": 119,
+      "protein": 16.9,
+      "carbs": 0.7,
+      "fat": 4.8
+    },
+    "serving": "1 porsiyon (100 g)",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "ciger",
+      "cig",
+      "raw",
+      "liver"
+    ]
+  },
+  {
+    "id": "cat:hindi-gogsu-cig",
+    "name": "Hindi Göğsü (Çiğ)",
+    "nameEn": "Turkey Breast (Raw)",
+    "per100g": {
+      "kcal": 104,
+      "protein": 24,
+      "carbs": 0,
+      "fat": 1
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "hindi",
+      "gogus",
+      "cig",
+      "raw",
+      "turkey",
+      "protein"
+    ]
+  },
+  {
+    "id": "cat:hindi-but-cig",
+    "name": "Hindi But (Çiğ)",
+    "nameEn": "Turkey Thigh (Raw)",
+    "per100g": {
+      "kcal": 130,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 5.5
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "hindi",
+      "but",
+      "cig",
+      "raw",
+      "turkey"
+    ]
+  },
+  {
+    "id": "cat:dana-kiyma-yagsiz-cig",
+    "name": "Dana Kıyma (%5 Yağlı, Çiğ)",
+    "nameEn": "Extra Lean Ground Beef 95/5 (Raw)",
+    "per100g": {
+      "kcal": 137,
+      "protein": 21.4,
+      "carbs": 0,
+      "fat": 5
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "kiyma",
+      "dana",
+      "yagsiz",
+      "cig",
+      "raw",
+      "beef",
+      "mince"
+    ]
+  },
+  {
+    "id": "cat:dana-kiyma-orta-cig",
+    "name": "Dana Kıyma (%10-%12 Yağlı, Çiğ)",
+    "nameEn": "Lean Ground Beef 90/10 (Raw)",
+    "per100g": {
+      "kcal": 176,
+      "protein": 20,
+      "carbs": 0,
+      "fat": 10
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "kiyma",
+      "dana",
+      "cig",
+      "raw",
+      "beef"
+    ]
+  },
+  {
+    "id": "cat:dana-kiyma-yagli-cig",
+    "name": "Dana Kıyma (%20 Yağlı, Çiğ)",
+    "nameEn": "Ground Beef 80/20 (Raw)",
+    "per100g": {
+      "kcal": 254,
+      "protein": 17.2,
+      "carbs": 0,
+      "fat": 20
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "kiyma",
+      "dana",
+      "yagli",
+      "cig",
+      "raw"
+    ]
+  },
+  {
+    "id": "cat:dana-bonfile-cig",
+    "name": "Dana Bonfile (Çiğ)",
+    "nameEn": "Beef Tenderloin (Raw)",
+    "per100g": {
+      "kcal": 143,
+      "protein": 22,
+      "carbs": 0,
+      "fat": 6
+    },
+    "serving": "1 dilim (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "bonfile",
+      "dana",
+      "biftek",
+      "cig",
+      "raw",
+      "tenderloin"
+    ]
+  },
+  {
+    "id": "cat:dana-antrikot-cig",
+    "name": "Dana Antrikot (Çiğ)",
+    "nameEn": "Ribeye Steak (Raw)",
+    "per100g": {
+      "kcal": 195,
+      "protein": 20.5,
+      "carbs": 0,
+      "fat": 12.5
+    },
+    "serving": "1 dilim (200 g)",
+    "gramsPerServing": 200,
+    "category": "meat",
+    "tags": [
+      "antrikot",
+      "dana",
+      "biftek",
+      "cig",
+      "raw",
+      "ribeye"
+    ]
+  },
+  {
+    "id": "cat:dana-kusbasi-cig",
+    "name": "Dana Kuşbaşı (Az Yağlı, Çiğ)",
+    "nameEn": "Diced Beef (Raw)",
+    "per100g": {
+      "kcal": 135,
+      "protein": 21.5,
+      "carbs": 0,
+      "fat": 5.5
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "kusbasi",
+      "dana",
+      "et",
+      "cig",
+      "raw"
+    ]
+  },
+  {
+    "id": "cat:kuzu-eti-cig",
+    "name": "Kuzu Kuşbaşı / Pirzola (Çiğ)",
+    "nameEn": "Lamb Chop / Cubes (Raw)",
+    "per100g": {
+      "kcal": 215,
+      "protein": 18,
+      "carbs": 0,
+      "fat": 16
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "kuzu",
+      "pirzola",
+      "et",
+      "cig",
+      "raw",
+      "lamb"
+    ]
+  },
+  {
+    "id": "cat:somon-cig",
+    "name": "Somon Fileto (Çiğ)",
+    "nameEn": "Atlantic Salmon (Raw)",
+    "per100g": {
+      "kcal": 182,
+      "protein": 20.5,
+      "carbs": 0,
+      "fat": 11
+    },
+    "serving": "1 dilim (150 g)",
+    "gramsPerServing": 150,
+    "category": "fish",
+    "tags": [
+      "somon",
+      "balik",
+      "cig",
+      "raw",
+      "salmon",
+      "omega3"
+    ]
+  },
+  {
+    "id": "cat:ton-baligi-taze-cig",
+    "name": "Ton Balığı (Taze Fileto, Çiğ)",
+    "nameEn": "Yellowfin / Ahi Tuna (Raw)",
+    "per100g": {
+      "kcal": 108,
+      "protein": 24.4,
+      "carbs": 0,
+      "fat": 0.5
+    },
+    "serving": "1 dilim (150 g)",
+    "gramsPerServing": 150,
+    "category": "fish",
+    "tags": [
+      "ton",
+      "balik",
+      "taze",
+      "cig",
+      "raw",
+      "tuna"
+    ]
+  },
+  {
+    "id": "cat:levrek-cig",
+    "name": "Levrek Fileto (Çiğ)",
+    "nameEn": "Sea Bass (Raw)",
+    "per100g": {
+      "kcal": 97,
+      "protein": 18.5,
+      "carbs": 0,
+      "fat": 2
+    },
+    "serving": "1 fileto (150 g)",
+    "gramsPerServing": 150,
+    "category": "fish",
+    "tags": [
+      "levrek",
+      "balik",
+      "cig",
+      "raw",
+      "seabass"
+    ]
+  },
+  {
+    "id": "cat:cipura-cig",
+    "name": "Çipura Fileto (Çiğ)",
+    "nameEn": "Sea Bream (Raw)",
+    "per100g": {
+      "kcal": 105,
+      "protein": 19,
+      "carbs": 0,
+      "fat": 3
+    },
+    "serving": "1 fileto (150 g)",
+    "gramsPerServing": 150,
+    "category": "fish",
+    "tags": [
+      "cipura",
+      "balik",
+      "cig",
+      "raw",
+      "seabream"
+    ]
+  },
+  {
+    "id": "cat:karides-cig",
+    "name": "Karides (Çiğ)",
+    "nameEn": "Shrimp (Raw)",
+    "per100g": {
+      "kcal": 85,
+      "protein": 20,
+      "carbs": 0.5,
+      "fat": 0.5
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "fish",
+    "tags": [
+      "karides",
+      "deniz",
+      "cig",
+      "raw",
+      "shrimp"
+    ]
+  },
+  {
+    "id": "cat:pirinc-cig",
+    "name": "Pirinç (Çiğ, Beyaz Baldo/Osmancık)",
+    "nameEn": "White Rice (Raw)",
+    "per100g": {
+      "kcal": 360,
+      "protein": 7,
+      "carbs": 79,
+      "fat": 0.6
+    },
+    "serving": "1 su bardağı (180 g)",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "pirinc",
+      "beyaz",
+      "baldo",
+      "osmancik",
+      "pilav",
+      "cig",
+      "raw",
+      "rice",
+      "karb"
+    ]
+  },
+  {
+    "id": "cat:basmati-pirinc-cig",
+    "name": "Basmati Pirinç (Çiğ)",
+    "nameEn": "Basmati Rice (Raw)",
+    "per100g": {
+      "kcal": 355,
+      "protein": 8.5,
+      "carbs": 78,
+      "fat": 0.8
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "basmati",
+      "pirinc",
+      "cig",
+      "raw",
+      "rice"
+    ]
+  },
+  {
+    "id": "cat:esmer-pirinc-cig",
+    "name": "Esmer Pirinç (Çiğ)",
+    "nameEn": "Brown Rice (Raw)",
+    "per100g": {
+      "kcal": 362,
+      "protein": 7.5,
+      "carbs": 76,
+      "fat": 2.7
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "esmer",
+      "kepekli",
+      "pirinc",
+      "cig",
+      "raw",
+      "brown"
+    ]
+  },
+  {
+    "id": "cat:bulgur-cig",
+    "name": "Bulgur (Çiğ, Pilavlık/Köftelik)",
+    "nameEn": "Bulgur (Raw)",
+    "per100g": {
+      "kcal": 342,
+      "protein": 12.3,
+      "carbs": 76,
+      "fat": 1.3
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "bulgur",
+      "pilavlik",
+      "koftelik",
+      "cig",
+      "raw"
+    ]
+  },
+  {
+    "id": "cat:makarna-cig",
+    "name": "Makarna (Çiğ, Durum Buğdayı)",
+    "nameEn": "Pasta (Raw)",
+    "per100g": {
+      "kcal": 355,
+      "protein": 12.5,
+      "carbs": 72,
+      "fat": 1.5
+    },
+    "serving": "1 porsiyon (100 g)",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "makarna",
+      "spagetti",
+      "cig",
+      "raw",
+      "pasta",
+      "karb"
+    ]
+  },
+  {
+    "id": "cat:tam-bugday-makarna-cig",
+    "name": "Tam Buğday Makarna (Çiğ)",
+    "nameEn": "Whole Wheat Pasta (Raw)",
+    "per100g": {
+      "kcal": 348,
+      "protein": 14.5,
+      "carbs": 65,
+      "fat": 2.5
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "tam",
+      "bugday",
+      "kepekli",
+      "makarna",
+      "cig",
+      "raw"
+    ]
+  },
+  {
+    "id": "cat:yulaf-cig",
+    "name": "Yulaf Ezmesi (Çiğ)",
+    "nameEn": "Rolled Oats (Raw)",
+    "per100g": {
+      "kcal": 370,
+      "protein": 13.5,
+      "carbs": 62,
+      "fat": 7
+    },
+    "serving": "1 kase (50 g)",
+    "gramsPerServing": 50,
+    "category": "grain",
+    "tags": [
+      "yulaf",
+      "ezme",
+      "cig",
+      "raw",
+      "oats",
+      "kahvalti"
+    ]
+  },
+  {
+    "id": "cat:karabugday-cig",
+    "name": "Karabuğday / Greçka (Çiğ)",
+    "nameEn": "Buckwheat (Raw)",
+    "per100g": {
+      "kcal": 343,
+      "protein": 13.3,
+      "carbs": 71.5,
+      "fat": 3.4
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "karabugday",
+      "grecka",
+      "cig",
+      "raw",
+      "buckwheat"
+    ]
+  },
+  {
+    "id": "cat:kinoa-cig",
+    "name": "Kinoa (Çiğ)",
+    "nameEn": "Quinoa (Raw)",
+    "per100g": {
+      "kcal": 368,
+      "protein": 14,
+      "carbs": 64,
+      "fat": 6
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "kinoa",
+      "cig",
+      "raw",
+      "quinoa"
+    ]
+  },
+  {
+    "id": "cat:kirmizi-mercimek-cig",
+    "name": "Kırmızı Mercimek (Çiğ)",
+    "nameEn": "Red Lentils (Raw)",
+    "per100g": {
+      "kcal": 340,
+      "protein": 24.5,
+      "carbs": 58,
+      "fat": 1.2
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "kirmizi",
+      "mercimek",
+      "corba",
+      "cig",
+      "raw",
+      "lentils"
+    ]
+  },
+  {
+    "id": "cat:yesil-mercimek-cig",
+    "name": "Yeşil Mercimek (Çiğ)",
+    "nameEn": "Green Lentils (Raw)",
+    "per100g": {
+      "kcal": 335,
+      "protein": 24,
+      "carbs": 56,
+      "fat": 1.1
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "yesil",
+      "mercimek",
+      "cig",
+      "raw",
+      "lentils"
+    ]
+  },
+  {
+    "id": "cat:nohut-cig",
+    "name": "Nohut (Çiğ)",
+    "nameEn": "Chickpeas (Raw)",
+    "per100g": {
+      "kcal": 364,
+      "protein": 19.3,
+      "carbs": 60.6,
+      "fat": 6
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "nohut",
+      "bakliyat",
+      "cig",
+      "raw",
+      "chickpea"
+    ]
+  },
+  {
+    "id": "cat:kuru-fasulye-cig",
+    "name": "Kuru Fasulye (Çiğ)",
+    "nameEn": "White Kidney Beans (Raw)",
+    "per100g": {
+      "kcal": 330,
+      "protein": 22.3,
+      "carbs": 58,
+      "fat": 1.5
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "kuru",
+      "fasulye",
+      "cig",
+      "raw",
+      "beans"
+    ]
+  },
+  {
+    "id": "cat:barbunya-cig",
+    "name": "Barbunya (Çiğ)",
+    "nameEn": "Pinto Beans (Raw)",
+    "per100g": {
+      "kcal": 335,
+      "protein": 21,
+      "carbs": 59,
+      "fat": 1.2
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "grain",
+    "tags": [
+      "barbunya",
+      "bakliyat",
+      "cig",
+      "raw"
+    ]
+  },
+  {
+    "id": "cat:patates-cig",
+    "name": "Patates (Çiğ)",
+    "nameEn": "Potato (Raw)",
+    "per100g": {
+      "kcal": 77,
+      "protein": 2,
+      "carbs": 17.5,
+      "fat": 0.1
+    },
+    "serving": "1 orta boy (150 g)",
+    "gramsPerServing": 150,
+    "category": "vegetable",
+    "tags": [
+      "patates",
+      "cig",
+      "raw",
+      "potato",
+      "karb"
+    ]
+  },
+  {
+    "id": "cat:tatli-patates-cig",
+    "name": "Tatlı Patates (Çiğ)",
+    "nameEn": "Sweet Potato (Raw)",
+    "per100g": {
+      "kcal": 86,
+      "protein": 1.6,
+      "carbs": 20.1,
+      "fat": 0.1
+    },
+    "serving": "1 orta boy (150 g)",
+    "gramsPerServing": 150,
+    "category": "vegetable",
+    "tags": [
+      "tatli",
+      "patates",
+      "cig",
+      "raw",
+      "sweet",
+      "potato"
+    ]
+  },
+  {
+    "id": "cat:brokoli-cig",
+    "name": "Brokoli (Çiğ)",
+    "nameEn": "Broccoli (Raw)",
+    "per100g": {
+      "kcal": 34,
+      "protein": 2.8,
+      "carbs": 6.6,
+      "fat": 0.4
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "vegetable",
+    "tags": [
+      "brokoli",
+      "sebze",
+      "cig",
+      "raw",
+      "broccoli"
+    ]
+  },
+  {
+    "id": "cat:ispanak-cig",
+    "name": "Ispanak (Çiğ)",
+    "nameEn": "Spinach (Raw)",
+    "per100g": {
+      "kcal": 23,
+      "protein": 2.9,
+      "carbs": 3.6,
+      "fat": 0.4
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "vegetable",
+    "tags": [
+      "ispanak",
+      "cig",
+      "raw",
+      "spinach"
+    ]
+  },
+  {
+    "id": "cat:kabak-cig",
+    "name": "Kabak (Çiğ)",
+    "nameEn": "Zucchini (Raw)",
+    "per100g": {
+      "kcal": 17,
+      "protein": 1.2,
+      "carbs": 3.1,
+      "fat": 0.3
+    },
+    "serving": "1 adet (150 g)",
+    "gramsPerServing": 150,
+    "category": "vegetable",
+    "tags": [
+      "kabak",
+      "cig",
+      "raw",
+      "zucchini"
+    ]
+  },
+  {
+    "id": "cat:havuc-cig",
+    "name": "Havuç (Çiğ)",
+    "nameEn": "Carrot (Raw)",
+    "per100g": {
+      "kcal": 41,
+      "protein": 0.9,
+      "carbs": 9.6,
+      "fat": 0.2
+    },
+    "serving": "1 adet (80 g)",
+    "gramsPerServing": 80,
+    "category": "vegetable",
+    "tags": [
+      "havuc",
+      "cig",
+      "raw",
+      "carrot"
+    ]
+  },
+  {
+    "id": "cat:domates-cig",
+    "name": "Domates (Çiğ)",
+    "nameEn": "Tomato (Raw)",
+    "per100g": {
+      "kcal": 18,
+      "protein": 0.9,
+      "carbs": 3.9,
+      "fat": 0.2
+    },
+    "serving": "1 orta boy (120 g)",
+    "gramsPerServing": 120,
+    "category": "vegetable",
+    "tags": [
+      "domates",
+      "cig",
+      "raw",
+      "tomato"
+    ]
+  },
+  {
+    "id": "cat:salatalik-cig",
+    "name": "Salatalık (Çiğ)",
+    "nameEn": "Cucumber (Raw)",
+    "per100g": {
+      "kcal": 15,
+      "protein": 0.7,
+      "carbs": 3.6,
+      "fat": 0.1
+    },
+    "serving": "1 adet (120 g)",
+    "gramsPerServing": 120,
+    "category": "vegetable",
+    "tags": [
+      "salatalik",
+      "cig",
+      "raw",
+      "cucumber"
+    ]
+  },
+  {
+    "id": "cat:mantar-cig",
+    "name": "Mantar (Kültür, Çiğ)",
+    "nameEn": "White Button Mushrooms (Raw)",
+    "per100g": {
+      "kcal": 22,
+      "protein": 3.1,
+      "carbs": 3.3,
+      "fat": 0.3
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "vegetable",
+    "tags": [
+      "mantar",
+      "kultur",
+      "cig",
+      "raw",
+      "mushroom"
+    ]
+  },
+  {
+    "id": "cat:avokado-cig",
+    "name": "Avokado (Çiğ)",
+    "nameEn": "Avocado (Raw)",
+    "per100g": {
+      "kcal": 160,
+      "protein": 2,
+      "carbs": 8.5,
+      "fat": 14.7
+    },
+    "serving": "1 yarım (75 g)",
+    "gramsPerServing": 75,
+    "category": "fruit",
+    "tags": [
+      "avokado",
+      "cig",
+      "raw",
+      "avocado",
+      "yag"
+    ]
+  },
+  {
+    "id": "cat:cig-ceviz",
+    "name": "Çiğ Ceviz",
+    "nameEn": "Raw Walnuts",
+    "per100g": {
+      "kcal": 654,
+      "protein": 15.2,
+      "carbs": 13.7,
+      "fat": 65.2
+    },
+    "serving": "1 avuç (25 g)",
+    "gramsPerServing": 25,
+    "category": "nut",
+    "tags": [
+      "ceviz",
+      "cig",
+      "raw",
+      "walnuts",
+      "kuruyemis"
+    ]
+  },
+  {
+    "id": "cat:cig-findik",
+    "name": "Çiğ Fındık",
+    "nameEn": "Raw Hazelnuts",
+    "per100g": {
+      "kcal": 628,
+      "protein": 15,
+      "carbs": 16.7,
+      "fat": 60.8
+    },
+    "serving": "1 avuç (25 g)",
+    "gramsPerServing": 25,
+    "category": "nut",
+    "tags": [
+      "findik",
+      "cig",
+      "raw",
+      "hazelnuts",
+      "kuruyemis"
+    ]
+  },
+  {
+    "id": "cat:cig-kaju",
+    "name": "Çiğ Kaju",
+    "nameEn": "Raw Cashews",
+    "per100g": {
+      "kcal": 553,
+      "protein": 18.2,
+      "carbs": 30.2,
+      "fat": 43.8
+    },
+    "serving": "1 avuç (25 g)",
+    "gramsPerServing": 25,
+    "category": "nut",
+    "tags": [
+      "kaju",
+      "cig",
+      "raw",
+      "cashews",
+      "kuruyemis"
+    ]
+  },
+  {
+    "id": "cat:cig-kabak-cekirdegi",
+    "name": "Çiğ Kabak Çekirdeği",
+    "nameEn": "Raw Pumpkin Seeds",
+    "per100g": {
+      "kcal": 559,
+      "protein": 30.2,
+      "carbs": 10.7,
+      "fat": 49
+    },
+    "serving": "1 avuç (30 g)",
+    "gramsPerServing": 30,
+    "category": "nut",
+    "tags": [
+      "kabak",
+      "cekirdek",
+      "cig",
+      "raw",
+      "pumpkin",
+      "seeds"
+    ]
+  },
+  {
+    "id": "cat:chia-tohumu",
+    "name": "Chia Tohumu (Çiğ)",
+    "nameEn": "Chia Seeds (Raw)",
+    "per100g": {
+      "kcal": 486,
+      "protein": 16.5,
+      "carbs": 42.1,
+      "fat": 30.7
+    },
+    "serving": "1 yemek kaşığı (12 g)",
+    "gramsPerServing": 12,
+    "category": "nut",
+    "tags": [
+      "chia",
+      "tohum",
+      "cig",
+      "raw",
+      "seeds"
+    ]
+  },
+  {
+    "id": "cat:keten-tohumu",
+    "name": "Keten Tohumu (Çiğ)",
+    "nameEn": "Flaxseed (Raw)",
+    "per100g": {
+      "kcal": 534,
+      "protein": 18.3,
+      "carbs": 28.9,
+      "fat": 42.2
+    },
+    "serving": "1 yemek kaşığı (10 g)",
+    "gramsPerServing": 10,
+    "category": "nut",
+    "tags": [
+      "keten",
+      "tohum",
+      "cig",
+      "raw",
+      "flax"
+    ]
+  },
+  {
+    "id": "cat:yumurta",
+    "name": "Yumurta (Bütün)",
+    "nameEn": "Whole Egg",
+    "per100g": {
+      "kcal": 143,
+      "protein": 12.6,
+      "carbs": 0.7,
+      "fat": 9.5
+    },
+    "serving": "1 adet büyük (50 g)",
+    "gramsPerServing": 50,
+    "category": "dairy_egg",
+    "tags": [
+      "egg",
+      "protein",
+      "kahvalti"
+    ]
+  },
+  {
+    "id": "cat:yumurta-beyazi",
+    "name": "Yumurta Beyazı",
+    "nameEn": "Egg White",
+    "per100g": {
+      "kcal": 52,
+      "protein": 10.9,
+      "carbs": 0.7,
+      "fat": 0.2
+    },
+    "serving": "1 adet büyük (33 g)",
+    "gramsPerServing": 33,
+    "category": "dairy_egg",
+    "tags": [
+      "egg",
+      "white",
+      "protein"
+    ]
+  },
+  {
+    "id": "cat:lor-peyniri",
+    "name": "Lor Peyniri (Yağsız)",
+    "nameEn": "Cottage Cheese (Fat Free)",
+    "per100g": {
+      "kcal": 85,
+      "protein": 17,
+      "carbs": 3,
+      "fat": 0.5
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "dairy_egg",
+    "tags": [
+      "peynir",
+      "lor",
+      "protein"
+    ]
+  },
+  {
+    "id": "cat:beyaz-peynir",
+    "name": "Beyaz Peynir (Tam Yağlı)",
+    "nameEn": "Feta / White Cheese",
+    "per100g": {
+      "kcal": 264,
+      "protein": 14.2,
+      "carbs": 1.5,
+      "fat": 21
+    },
+    "serving": "1 dilim (30 g)",
+    "gramsPerServing": 30,
+    "category": "dairy_egg",
+    "tags": [
+      "peynir",
+      "kahvalti"
+    ]
+  },
+  {
+    "id": "cat:kasar-peyniri",
+    "name": "Kaşar Peyniri",
+    "nameEn": "Kashar Cheese",
+    "per100g": {
+      "kcal": 350,
+      "protein": 27,
+      "carbs": 1.5,
+      "fat": 26
+    },
+    "serving": "1 dilim (25 g)",
+    "gramsPerServing": 25,
+    "category": "dairy_egg",
+    "tags": [
+      "peynir",
+      "kasar"
+    ]
+  },
+  {
+    "id": "cat:suzme-yogurt",
+    "name": "Süzme Yoğurt",
+    "nameEn": "Greek / Strained Yogurt",
+    "per100g": {
+      "kcal": 97,
+      "protein": 9,
+      "carbs": 4.5,
+      "fat": 5
+    },
+    "serving": "1 kase (200 g)",
+    "gramsPerServing": 200,
+    "category": "dairy_egg",
+    "tags": [
+      "yogurt",
+      "protein"
+    ]
+  },
+  {
+    "id": "cat:ev-yogurdu",
+    "name": "Yoğurt (Doğal)",
+    "nameEn": "Plain Yogurt",
+    "per100g": {
+      "kcal": 61,
+      "protein": 3.5,
+      "carbs": 4.7,
+      "fat": 3.3
+    },
+    "serving": "1 kase (200 g)",
+    "gramsPerServing": 200,
+    "category": "dairy_egg",
+    "tags": [
+      "yogurt"
+    ]
+  },
+  {
+    "id": "cat:inek-sutu",
+    "name": "Süt (Yarım Yağlı %1.5)",
+    "nameEn": "Milk (Semi-Skimmed)",
+    "per100g": {
+      "kcal": 46,
+      "protein": 3.1,
+      "carbs": 4.7,
+      "fat": 1.5
+    },
+    "serving": "1 su bardağı (200 ml)",
+    "gramsPerServing": 200,
+    "category": "dairy_egg",
+    "tags": [
+      "sut",
+      "milk"
+    ]
+  },
+  {
+    "id": "cat:kefir",
+    "name": "Kefir",
+    "nameEn": "Kefir",
+    "per100g": {
+      "kcal": 52,
+      "protein": 3.4,
+      "carbs": 4,
+      "fat": 2.5
+    },
+    "serving": "1 su bardağı (200 ml)",
+    "gramsPerServing": 200,
+    "category": "dairy_egg",
+    "tags": [
+      "kefir",
+      "probiyotik"
+    ]
+  },
+  {
+    "id": "cat:tavuk-gogsu",
+    "name": "Tavuk Göğsü (Pişmiş/Izgara)",
+    "nameEn": "Chicken Breast (Cooked)",
+    "per100g": {
+      "kcal": 165,
+      "protein": 31,
+      "carbs": 0,
+      "fat": 3.6
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "chicken",
+      "protein",
+      "gogus"
+    ]
+  },
+  {
+    "id": "cat:tavuk-but",
+    "name": "Tavuk But (Derisiz Pişmiş)",
+    "nameEn": "Chicken Thigh (Skinless Cooked)",
+    "per100g": {
+      "kcal": 180,
+      "protein": 24,
+      "carbs": 0,
+      "fat": 9
+    },
+    "serving": "1 adet (120 g)",
+    "gramsPerServing": 120,
+    "category": "meat",
+    "tags": [
+      "tavuk",
+      "but"
+    ]
+  },
+  {
+    "id": "cat:hindi-gogsu",
+    "name": "Hindi Göğsü (Pişmiş)",
+    "nameEn": "Turkey Breast (Cooked)",
+    "per100g": {
+      "kcal": 135,
+      "protein": 30,
+      "carbs": 0,
+      "fat": 1.5
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "hindi",
+      "turkey",
+      "protein"
+    ]
+  },
+  {
+    "id": "cat:dana-biftek",
+    "name": "Dana Biftek (Yağsız Izgara)",
+    "nameEn": "Beef Steak (Lean Grilled)",
+    "per100g": {
+      "kcal": 205,
+      "protein": 27,
+      "carbs": 0,
+      "fat": 10
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "meat",
+    "tags": [
+      "et",
+      "dana",
+      "biftek",
+      "steak"
+    ]
+  },
+  {
+    "id": "cat:dana-kiyma",
+    "name": "Dana Kıyma (%10-15 Yağlı)",
+    "nameEn": "Ground Beef (Lean)",
+    "per100g": {
+      "kcal": 215,
+      "protein": 25,
+      "carbs": 0,
+      "fat": 12
+    },
+    "serving": "100 g",
+    "gramsPerServing": 100,
+    "category": "meat",
+    "tags": [
+      "kiyma",
+      "et",
+      "beef"
+    ]
+  },
+  {
+    "id": "cat:ton-baligi-konserve",
+    "name": "Ton Balığı (Konserve Suda)",
+    "nameEn": "Canned Tuna (in Water)",
+    "per100g": {
+      "kcal": 116,
+      "protein": 26,
+      "carbs": 0,
+      "fat": 1
+    },
+    "serving": "1 kutu süzülmüş (120 g)",
+    "gramsPerServing": 120,
+    "category": "fish",
+    "tags": [
+      "ton",
+      "baligi",
+      "tuna",
+      "protein"
+    ]
+  },
+  {
+    "id": "cat:somon",
+    "name": "Somon Balığı (Izgara)",
+    "nameEn": "Salmon (Grilled)",
+    "per100g": {
+      "kcal": 206,
+      "protein": 22,
+      "carbs": 0,
+      "fat": 12.5
+    },
+    "serving": "1 porsiyon (180 g)",
+    "gramsPerServing": 180,
+    "category": "fish",
+    "tags": [
+      "somon",
+      "baligi",
+      "omega3"
+    ]
+  },
+  {
+    "id": "cat:levrek",
+    "name": "Levrek (Izgara)",
+    "nameEn": "Sea Bass (Grilled)",
+    "per100g": {
+      "kcal": 124,
+      "protein": 23,
+      "carbs": 0,
+      "fat": 3
+    },
+    "serving": "1 porsiyon (200 g)",
+    "gramsPerServing": 200,
+    "category": "fish",
+    "tags": [
+      "levrek",
+      "baligi"
+    ]
+  },
+  {
+    "id": "cat:yulaf-ezmesi",
+    "name": "Yulaf Ezmesi",
+    "nameEn": "Rolled Oats",
+    "per100g": {
+      "kcal": 370,
+      "protein": 13.5,
+      "carbs": 60,
+      "fat": 7
+    },
+    "serving": "1 porsiyon (50 g)",
+    "gramsPerServing": 50,
+    "category": "grain",
+    "tags": [
+      "yulaf",
+      "oats",
+      "kahvalti",
+      "lif"
+    ]
+  },
+  {
+    "id": "cat:pirinc-pilavi",
+    "name": "Pirinç Pilavı (Sade)",
+    "nameEn": "White Rice Pilaf",
+    "per100g": {
+      "kcal": 145,
+      "protein": 2.7,
+      "carbs": 30,
+      "fat": 2.2
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "dish",
+    "tags": [
+      "pilav",
+      "pirinc",
+      "rice"
+    ]
+  },
+  {
+    "id": "cat:haslanmis-pirinc",
+    "name": "Basmati Pirinç (Haşlanmış)",
+    "nameEn": "Basmati Rice (Boiled)",
+    "per100g": {
+      "kcal": 130,
+      "protein": 2.8,
+      "carbs": 28,
+      "fat": 0.3
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "grain",
+    "tags": [
+      "pirinc",
+      "basmati",
+      "rice"
+    ]
+  },
+  {
+    "id": "cat:bulgur-pilavi",
+    "name": "Bulgur Pilavı (Geleneksel)",
+    "nameEn": "Bulgur Pilaf",
+    "per100g": {
+      "kcal": 114,
+      "protein": 2.8,
+      "carbs": 18.2,
+      "fat": 3.4
+    },
+    "serving": "1 porsiyon (130 g)",
+    "gramsPerServing": 130,
+    "category": "dish",
+    "tags": [
+      "bulgur",
+      "pilav",
+      "tahil"
+    ]
+  },
+  {
+    "id": "cat:patates-haslama",
+    "name": "Patates (Haşlanmış)",
+    "nameEn": "Boiled Potato",
+    "per100g": {
+      "kcal": 87,
+      "protein": 1.9,
+      "carbs": 20,
+      "fat": 0.1
+    },
+    "serving": "1 orta boy (150 g)",
+    "gramsPerServing": 150,
+    "category": "carb",
+    "tags": [
+      "patates",
+      "potato"
+    ]
+  },
+  {
+    "id": "cat:tatli-patates",
+    "name": "Tatlı Patates (Fırında)",
+    "nameEn": "Sweet Potato (Baked)",
+    "per100g": {
+      "kcal": 90,
+      "protein": 2,
+      "carbs": 20.7,
+      "fat": 0.2
+    },
+    "serving": "1 orta boy (130 g)",
+    "gramsPerServing": 130,
+    "category": "carb",
+    "tags": [
+      "tatli",
+      "patates"
+    ]
+  },
+  {
+    "id": "cat:makarna-haslanmis",
+    "name": "Makarna (Sade Haşlanmış)",
+    "nameEn": "Pasta (Cooked)",
+    "per100g": {
+      "kcal": 131,
+      "protein": 5,
+      "carbs": 25,
+      "fat": 1.1
+    },
+    "serving": "1 tabak (200 g)",
+    "gramsPerServing": 200,
+    "category": "grain",
+    "tags": [
+      "makarna",
+      "pasta"
+    ]
+  },
+  {
+    "id": "cat:tam-bugday-ekmegi",
+    "name": "Tam Buğday Ekmeği",
+    "nameEn": "Whole Wheat Bread",
+    "per100g": {
+      "kcal": 245,
+      "protein": 11,
+      "carbs": 44,
+      "fat": 3
+    },
+    "serving": "1 dilim (35 g)",
+    "gramsPerServing": 35,
+    "category": "grain",
+    "tags": [
+      "ekmek",
+      "tam",
+      "bugday"
+    ]
+  },
+  {
+    "id": "cat:beyaz-ekmek",
+    "name": "Somun Ekmek (Beyaz)",
+    "nameEn": "White Bread",
+    "per100g": {
+      "kcal": 265,
+      "protein": 9,
+      "carbs": 50,
+      "fat": 2
+    },
+    "serving": "1 dilim (30 g)",
+    "gramsPerServing": 30,
+    "category": "grain",
+    "tags": [
+      "ekmek",
+      "beyaz"
+    ]
+  },
+  {
+    "id": "cat:mercimek-haslanmis",
+    "name": "Yeşil Mercimek (Haşlanmış)",
+    "nameEn": "Cooked Green Lentils",
+    "per100g": {
+      "kcal": 116,
+      "protein": 9,
+      "carbs": 20,
+      "fat": 0.4
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "legume",
+    "tags": [
+      "mercimek",
+      "yesil",
+      "bakliyat"
+    ]
+  },
+  {
+    "id": "cat:nohut-haslanmis",
+    "name": "Nohut (Haşlanmış)",
+    "nameEn": "Cooked Chickpeas",
+    "per100g": {
+      "kcal": 164,
+      "protein": 8.9,
+      "carbs": 27,
+      "fat": 2.6
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "legume",
+    "tags": [
+      "nohut",
+      "chickpea"
+    ]
+  },
+  {
+    "id": "cat:kuru-fasulye-haslanmis",
+    "name": "Kuru Fasulye (Haşlanmış)",
+    "nameEn": "Cooked White Beans",
+    "per100g": {
+      "kcal": 140,
+      "protein": 9.7,
+      "carbs": 25,
+      "fat": 0.5
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "legume",
+    "tags": [
+      "fasulye",
+      "kuru",
+      "beans"
+    ]
+  },
+  {
+    "id": "cat:mercimek-corbasi",
+    "name": "Mercimek Çorbası",
+    "nameEn": "Red Lentil Soup",
+    "per100g": {
+      "kcal": 46,
+      "protein": 2.5,
+      "carbs": 8.3,
+      "fat": 0.2
+    },
+    "serving": "1 porsiyon (300 g)",
+    "gramsPerServing": 300,
+    "category": "dish",
+    "tags": [
+      "corba",
+      "mercimek",
+      "soup"
+    ]
+  },
+  {
+    "id": "cat:tarhana-corbasi",
+    "name": "Tarhana Çorbası",
+    "nameEn": "Tarhana Soup",
+    "per100g": {
+      "kcal": 50,
+      "protein": 2,
+      "carbs": 8.5,
+      "fat": 1
+    },
+    "serving": "1 kase (250 g)",
+    "gramsPerServing": 250,
+    "category": "dish",
+    "tags": [
+      "corba",
+      "tarhana"
+    ]
+  },
+  {
+    "id": "cat:etli-kuru-fasulye",
+    "name": "Etli Kuru Fasulye Yemeği",
+    "nameEn": "White Bean Stew with Meat",
+    "per100g": {
+      "kcal": 110,
+      "protein": 6.8,
+      "carbs": 12.5,
+      "fat": 3.5
+    },
+    "serving": "1 porsiyon (250 g)",
+    "gramsPerServing": 250,
+    "category": "dish",
+    "tags": [
+      "kuru",
+      "fasulye",
+      "etli"
+    ]
+  },
+  {
+    "id": "cat:karniyarik",
+    "name": "Karnıyarık (Kıymalı)",
+    "nameEn": "Karniyarik (Stuffed Eggplant)",
+    "per100g": {
+      "kcal": 55,
+      "protein": 3.2,
+      "carbs": 2.5,
+      "fat": 3.5
+    },
+    "serving": "1 adet (345 g)",
+    "gramsPerServing": 345,
+    "category": "dish",
+    "tags": [
+      "karniyarik",
+      "patlican",
+      "kiyma"
+    ]
+  },
+  {
+    "id": "cat:taze-fasulye-zeytinyagli",
+    "name": "Zeytinyağlı Taze Fasulye",
+    "nameEn": "Green Beans with Olive Oil",
+    "per100g": {
+      "kcal": 50,
+      "protein": 1.5,
+      "carbs": 4.8,
+      "fat": 2.8
+    },
+    "serving": "1 porsiyon (200 g)",
+    "gramsPerServing": 200,
+    "category": "dish",
+    "tags": [
+      "zeytinyagli",
+      "fasulye",
+      "taze"
+    ]
+  },
+  {
+    "id": "cat:menemen",
+    "name": "Menemen (Yumurtalı & Domatesli)",
+    "nameEn": "Menemen (Turkish Scrambled Eggs)",
+    "per100g": {
+      "kcal": 71,
+      "protein": 3.5,
+      "carbs": 3.4,
+      "fat": 4.8
+    },
+    "serving": "1 porsiyon (250 g)",
+    "gramsPerServing": 250,
+    "category": "dish",
+    "tags": [
+      "menemen",
+      "kahvalti",
+      "yumurta"
+    ]
+  },
+  {
+    "id": "cat:kofte-izgara",
+    "name": "Izgara Köfte (Anne Köftesi)",
+    "nameEn": "Grilled Meatballs (Kofte)",
+    "per100g": {
+      "kcal": 220,
+      "protein": 18,
+      "carbs": 5,
+      "fat": 14
+    },
+    "serving": "4 adet köfte (120 g)",
+    "gramsPerServing": 120,
+    "category": "dish",
+    "tags": [
+      "kofte",
+      "izgara",
+      "meatball"
+    ]
+  },
+  {
+    "id": "cat:tavuk-sote",
+    "name": "Tavuk Sote (Sebzeli)",
+    "nameEn": "Chicken Saute with Vegetables",
+    "per100g": {
+      "kcal": 95,
+      "protein": 12,
+      "carbs": 3,
+      "fat": 3.8
+    },
+    "serving": "1 porsiyon (200 g)",
+    "gramsPerServing": 200,
+    "category": "dish",
+    "tags": [
+      "tavuk",
+      "sote",
+      "sebzeli"
+    ]
+  },
+  {
+    "id": "cat:etli-nohut-yemegi",
+    "name": "Etli Nohut Yemeği",
+    "nameEn": "Chickpea Stew with Meat",
+    "per100g": {
+      "kcal": 125,
+      "protein": 7.2,
+      "carbs": 14,
+      "fat": 4.2
+    },
+    "serving": "1 porsiyon (250 g)",
+    "gramsPerServing": 250,
+    "category": "dish",
+    "tags": [
+      "nohut",
+      "etli"
+    ]
+  },
+  {
+    "id": "cat:mercimek-koftesi",
+    "name": "Mercimek Köftesi",
+    "nameEn": "Lentil Patties (Mercimek Köftesi)",
+    "per100g": {
+      "kcal": 135,
+      "protein": 4.8,
+      "carbs": 22,
+      "fat": 3.1
+    },
+    "serving": "3 adet (90 g)",
+    "gramsPerServing": 90,
+    "category": "dish",
+    "tags": [
+      "mercimek",
+      "koftesi"
+    ]
+  },
+  {
+    "id": "cat:kisir",
+    "name": "Kısır (Geleneksel)",
+    "nameEn": "Kisir (Bulgur Salad)",
+    "per100g": {
+      "kcal": 142,
+      "protein": 3.2,
+      "carbs": 21,
+      "fat": 5.1
+    },
+    "serving": "1 porsiyon (150 g)",
+    "gramsPerServing": 150,
+    "category": "dish",
+    "tags": [
+      "kisir",
+      "bulgur",
+      "salata"
+    ]
+  },
+  {
+    "id": "cat:cig-kofte-etsiz",
+    "name": "Etsiz Çiğ Köfte",
+    "nameEn": "Cig Kofte (Meatless)",
+    "per100g": {
+      "kcal": 180,
+      "protein": 5.5,
+      "carbs": 32,
+      "fat": 3.5
+    },
+    "serving": "4 sıkım (120 g)",
+    "gramsPerServing": 120,
+    "category": "dish",
+    "tags": [
+      "cig",
+      "kofte"
+    ]
+  },
+  {
+    "id": "cat:ispanak-yemegi",
+    "name": "Zeytinyağlı Ispanak Yemeği",
+    "nameEn": "Spinach Stew with Rice",
+    "per100g": {
+      "kcal": 45,
+      "protein": 2.1,
+      "carbs": 4.2,
+      "fat": 2.3
+    },
+    "serving": "1 porsiyon (200 g)",
+    "gramsPerServing": 200,
+    "category": "dish",
+    "tags": [
+      "ispanak",
+      "zeytinyagli"
+    ]
+  },
+  {
+    "id": "cat:tavuk-doner-durum",
+    "name": "Tavuk Döner Dürüm",
+    "nameEn": "Chicken Doner Wrap",
+    "per100g": {
+      "kcal": 165,
+      "protein": 11.5,
+      "carbs": 18,
+      "fat": 5
+    },
+    "serving": "1 dürüm (250 g)",
+    "gramsPerServing": 250,
+    "category": "dish",
+    "tags": [
+      "doner",
+      "tavuk",
+      "durum"
+    ]
+  },
+  {
+    "id": "cat:muz",
+    "name": "Muz",
+    "nameEn": "Banana",
+    "per100g": {
+      "kcal": 89,
+      "protein": 1.1,
+      "carbs": 22.8,
+      "fat": 0.3
+    },
+    "serving": "1 orta boy (118 g)",
+    "gramsPerServing": 118,
+    "category": "fruit",
+    "tags": [
+      "muz",
+      "banana",
+      "meyve"
+    ]
+  },
+  {
+    "id": "cat:elma",
+    "name": "Elma",
+    "nameEn": "Apple",
+    "per100g": {
+      "kcal": 52,
+      "protein": 0.3,
+      "carbs": 13.8,
+      "fat": 0.2
+    },
+    "serving": "1 orta boy (150 g)",
+    "gramsPerServing": 150,
+    "category": "fruit",
+    "tags": [
+      "elma",
+      "apple",
+      "meyve"
+    ]
+  },
+  {
+    "id": "cat:avokado",
+    "name": "Avokado",
+    "nameEn": "Avocado",
+    "per100g": {
+      "kcal": 160,
+      "protein": 2,
+      "carbs": 8.5,
+      "fat": 14.7
+    },
+    "serving": "1/2 adet (75 g)",
+    "gramsPerServing": 75,
+    "category": "fruit",
+    "tags": [
+      "avokado",
+      "yag"
+    ]
+  },
+  {
+    "id": "cat:zeytinyagi",
+    "name": "Zeytinyağı (Sızma)",
+    "nameEn": "Extra Virgin Olive Oil",
+    "per100g": {
+      "kcal": 884,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 100
+    },
+    "serving": "1 yemek kaşığı (10 g)",
+    "gramsPerServing": 10,
+    "category": "oil",
+    "tags": [
+      "zeytinyagi",
+      "oil",
+      "yag"
+    ]
+  },
+  {
+    "id": "cat:whey-protein",
+    "name": "Whey Protein Tozu",
+    "nameEn": "Whey Protein Powder",
+    "per100g": {
+      "kcal": 400,
+      "protein": 80,
+      "carbs": 6.7,
+      "fat": 5
+    },
+    "serving": "1 ölçek (30 g)",
+    "gramsPerServing": 30,
+    "category": "supplement",
+    "tags": [
+      "whey",
+      "protein",
+      "toz",
+      "supplement"
+    ]
+  },
+  {
+    "id": "cat:kreatin-monohidrat",
+    "name": "Kreatin Monohidrat",
+    "nameEn": "Creatine Monohydrate",
+    "per100g": {
+      "kcal": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0
+    },
+    "serving": "1 ölçek (5 g)",
+    "gramsPerServing": 5,
+    "category": "supplement",
+    "tags": [
+      "kreatin",
+      "creatine",
+      "supplement"
+    ]
+  }
+]
