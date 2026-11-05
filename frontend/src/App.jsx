@@ -52,6 +52,8 @@ import { openDeviceLinkRedeem } from './components/Passkeys.jsx'
 import { useAnimPacksBoot } from './components/Animations.jsx'
 import { useNfcTagLinks } from './components/Nfc.jsx'
 import { useRoutineLinks } from './components/RoutineShare.jsx'
+import { checkForUpdate } from './services/updateService.js'
+import { openUpdateModal } from './components/UpdateModal.jsx'
 import Login from './views/Login.jsx'
 import MobileOnboarding from './views/MobileOnboarding.jsx'
 import PermissionSteps from './views/PermissionSteps.jsx'
@@ -321,6 +323,23 @@ function Shell() {
     }, 1200)
     return () => clearTimeout(tm)
   }, [setupDone, S])
+  // In-App Auto Updater: Uygulama açılışında arka planda sessizce GitHub Releases kontrolü
+  const autoUpdateChecked = useRef(false)
+  useEffect(() => {
+    if (!setupDone || autoUpdateChecked.current) return
+    autoUpdateChecked.current = true
+    const tm = setTimeout(async () => {
+      try {
+        const info = await checkForUpdate({ silent: true })
+        if (info?.hasUpdate) {
+          openUpdateModal(info)
+        }
+      } catch {
+        // Çevrimdışı veya hata durumunda sessizce devam et
+      }
+    }, 2000)
+    return () => clearTimeout(tm)
+  }, [setupDone])
   // The boot screen in index.html covers the start; it goes once there is something to show.
   useEffect(() => { if (ready || authed) hideBoot() }, [ready, authed])
   if (!ready && !authed) return (

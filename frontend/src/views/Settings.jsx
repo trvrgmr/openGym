@@ -41,6 +41,7 @@ import { limitsFrom, fmtMB, MB } from '../lib/media-limits.js'
 import { setRestAccent } from '../lib/rest-alert.js'
 import { CUSTOM, accentKey, adjustedIn, applyAccent, cleanHex, inkOn, isGrey } from '../lib/accent.js'
 import { checkForUpdate, downloadAndInstall, fetchChecksum, forgetDownloadedUpdate, RELEASES_PAGE } from '../lib/update.js'
+import { openUpdateModal } from '../components/UpdateModal.jsx'
 import { APK_VARIANT, VARIANT_NAMES } from '../lib/apk-variant.js'
 import { BUILTIN_PX } from '../lib/anim-quality.js'
 import { getChannel, gymReminderBuilt } from '../lib/channel.js'
@@ -273,7 +274,12 @@ export default function Settings({ page = null, find = null, via = null, entryKe
     try {
       const info = await checkForUpdate()
       setUpdateInfo(info)
-      if (!info.hasUpdate) { toast(t('You have the latest version.')); forgetDownloadedUpdate() }
+      if (info?.hasUpdate) {
+        openUpdateModal(info)
+      } else {
+        toast(t('You have the latest version.'))
+        forgetDownloadedUpdate()
+      }
     } catch {
       toast(t('Couldn’t check for updates. Are you online?'))
     }
@@ -283,38 +289,13 @@ export default function Settings({ page = null, find = null, via = null, entryKe
   const onUpdateRowClick = () => {
     if (!updateInfo?.hasUpdate) return
     if (updateInfo.apkUrl) {
-      // Start download & install
-      const version = updateInfo.latestVersion
-      confirmSheet({
-        title: t('Update to {0}?', version),
+      openUpdateModal(updateInfo)
+      confirmSheet?.({
+        title: t('Update to {0}?', updateInfo.latestVersion),
         message: t('The latest version will be downloaded and the installer will open.'),
         confirmText: t('Download & Install'),
-        onConfirm: async () => {
-          // Open a progress sheet
-          let closeProgress = null
-          let setProgress = null
-          useUI.getState().openSheet(close => {
-            closeProgress = close
-            return <DownloadProgress ref={fn => { setProgress = fn }} />
-          }, { locked: true })
-          try {
-            // The release always publishes the checksum next to the APK. Without it the file is
-            // not installed — a sideloaded binary is exactly the thing that should be verified.
-            let expectedHash = null
-            try { expectedHash = await fetchChecksum(updateInfo.hashUrl) } catch (e) { /* reported below */ }
-            if (!/^[0-9a-f]{64}$/i.test(expectedHash || '')) throw new Error(t('Checksum not available, so not installing'))
-            await downloadAndInstall(updateInfo.apkUrl, expectedHash, (received, total) => {
-              if (setProgress) setProgress(received, total)
-            })
-            if (closeProgress) closeProgress()
-          } catch (e) {
-            if (closeProgress) closeProgress()
-            toast(t('Update failed: {0}', e.message))
-          }
-        },
       })
     } else {
-      // Update available but no APK asset — open the releases page
       window.open(RELEASES_PAGE, '_blank', 'noopener')
     }
   }

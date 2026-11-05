@@ -28,6 +28,7 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(HealthConnectPlugin.class);
         registerPlugin(ChannelPlugin.class);
         FlavorPlugins.register(this);
+        registerPlugin(AppUpdaterPlugin.class);
         registerPlugin(PrintPlugin.class);
         registerPlugin(RestAlertPlugin.class);
         registerPlugin(BackupFolderPlugin.class);
