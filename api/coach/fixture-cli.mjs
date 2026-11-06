@@ -69,6 +69,13 @@ if (MODE === 'nochange' || (kind === 'review' && !(P.window?.workouts || []).len
   out({ coach_contract: 1, nochange: true, reading: 'Not enough new training to read anything into yet — keep logging and ask again in a week.' });
 }
 
+if (kind === "ask" || /answer a question/i.test(prompt)) {
+  out({
+    coach_contract: 1,
+    answer: "Antrenman ve kalori verilerini analiz ettim. Günlük protein alımın ve antrenman tutarlılığın gayet dengeli görünüyor; ilerlemeye aynı şekilde devam edebilirsin."
+  });
+}
+
 if (kind === 'create') {
   const lib = (P.library || []).slice(0, 6);
   const ex = (i) => lib[i % Math.max(1, lib.length)] || { id: 'unknown' };

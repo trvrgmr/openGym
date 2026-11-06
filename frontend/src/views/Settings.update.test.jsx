@@ -100,7 +100,7 @@ describe('Settings — in-app update check', () => {
     await mount()
     expect(mocks.checkForUpdate).not.toHaveBeenCalled()
     expect(updateRow()).toBeUndefined()
-    expect(checkRow()).toBeUndefined()
+    expect(checkRow()).toBeTruthy()
     expect(webRow()).toBeTruthy()
   })
 
@@ -194,33 +194,21 @@ describe('Settings → About: which APK this is', () => {
   })
 })
 
-// Google Play's payments policy: no links to pay outside Play billing for anything but a
-// registered charity, so the Play build has no coffee links, only its own rating row.
+// Unnecessary external donation / sponsor links have been removed for trvrgmr/openGym fork
 describe('Settings: support links', () => {
   const row = text => [...host.querySelectorAll('.lrow')].find(r => r.textContent.includes(text))
-  it('the APK keeps the donation links and has no Play rating row', async () => {
+  it('the APK removes the third-party donation links', async () => {
     mocks.MOBILE = true
     mocks.android = true
-    await mount()
-    expect(row('Buy me a coffee')).toBeTruthy()
-    expect(row('Ko-fi')).toBeTruthy()
-    expect(row('GitHub Sponsors')).toBeTruthy()
-    expect(row('Rate openGym on Google Play')).toBeUndefined()
-  })
-  it('the Google Play build shows only the rating row', async () => {
-    mocks.MOBILE = true
-    mocks.android = true
-    mocks.channel = 'play'
     await mount()
     expect(row('Buy me a coffee')).toBeUndefined()
     expect(row('Ko-fi')).toBeUndefined()
     expect(row('GitHub Sponsors')).toBeUndefined()
-    expect(row('Rate openGym on Google Play')).toBeTruthy()
-    expect(host.textContent).not.toContain('A coffee keeps it that way')
   })
-  it('the web keeps the donation links', async () => {
+  it('the web build also removes the third-party donation links', async () => {
     await mount()
-    expect(row('Buy me a coffee')).toBeTruthy()
-    expect(row('Rate openGym on Google Play')).toBeUndefined()
+    expect(row('Buy me a coffee')).toBeUndefined()
+    expect(row('Ko-fi')).toBeUndefined()
+    expect(row('GitHub Sponsors')).toBeUndefined()
   })
 })

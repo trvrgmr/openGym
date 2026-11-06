@@ -14,6 +14,7 @@ import {
   copyMealEntries,
   customFoodsOf,
   dayTotals,
+  dietConsistencyScore,
   hasNutritionData,
   kcalFromMacros,
   macroBreakdown,
@@ -302,3 +303,217 @@ describe('useStore persistence & sync-merge integration', () => {
     expect(wiped.nutritionLogs).toEqual({})
   })
 })
+
+describe('dietConsistencyScore adherence & consistency calculation', () => {
+  it('handles null, undefined, empty state, and missing goals with complete null-safety', () => {
+    const resNull = dietConsistencyScore(null, '2026-11-06')
+    expect(resNull).toMatchObject({
+      score: 0,
+      loggedDays: 0,
+      totalDays: 7,
+      avgKcal: 0,
+      goalKcal: DEFAULT_NUTRITION_GOALS.kcal,
+      tier: 'low',
+      label: 'Building habit',
+    })
+    expect(resNull.history).toHaveLength(7)
+    expect(resNull.history.every(d => !d.logged && d.score === 0)).toBe(true)
+
+    const resEmpty = dietConsistencyScore({}, '2026-11-06')
+    expect(resEmpty.score).toBe(0)
+    expect(resEmpty.loggedDays).toBe(0)
+
+    // Handled safely without division by zero when goals are 0
+    const resZeroGoals = dietConsistencyScore({ nutritionGoals: { kcal: 0, protein: 0 } }, '2026-11-06')
+    expect(resZeroGoals.score).toBe(0)
+    expect(resZeroGoals.goalKcal).toBe(DEFAULT_NUTRITION_GOALS.kcal)
+
+    // Tolerates missing/invalid endISO by falling back to todayISO()
+    const resNoEnd = dietConsistencyScore(null)
+    expect(resNoEnd.history).toHaveLength(7)
+    expect(resNoEnd.totalDays).toBe(7)
+
+    // Custom days parameter
+    const res14 = dietConsistencyScore(null, '2026-11-06', 14)
+    expect(res14.totalDays).toBe(14)
+    expect(res14.history).toHaveLength(14)
+
+    // Invalid days fallback
+    expect(dietConsistencyScore(null, '2026-11-06', 0).totalDays).toBe(7)
+    expect(dietConsistencyScore(null, '2026-11-06', -5).totalDays).toBe(7)
+    expect(dietConsistencyScore(null, '2026-11-06', 'invalid').totalDays).toBe(7)
+  })
+
+  it('scores 100 for perfect calorie precision (within ±10%) and protein adherence (>=90%)', () => {
+    const s = {}
+    setNutritionGoals(s, { kcal: 2000, protein: 150 })
+    // Day 1: Exactly on target
+    addMealEntry(s, '2026-11-01', 'lunch', { name: 'Balanced', kcal: 2000, protein: 150 })
+    // Day 2: Within +10% kcal (2200), protein 135 (exactly 90%)
+    addMealEntry(s, '2026-11-02', 'lunch', { name: 'Upper edge', kcal: 2200, protein: 135 })
+    // Day 3: Within -10% kcal (1800), protein 160 (>90%)
+    addMealEntry(s, '2026-11-03', 'lunch', { name: 'Lower edge', kcal: 1800, protein: 160 })
+
+    const res = dietConsistencyScore(s, '2026-11-03', 3)
+    expect(res.loggedDays).toBe(3)
+    expect(res.totalDays).toBe(3)
+    expect(res.score).toBe(100)
+    expect(res.tier).toBe('optimal')
+    expect(res.label).toBe('Optimal')
+    expect(res.history.every(d => d.score === 100)).toBe(true)
+  })
+
+  it('scales calorie precision linearly between 10% and 50% deviation and floors at 0 for >50%', () => {
+    const s = {}
+    setNutritionGoals(s, { kcal: 2000, protein: 100 })
+
+    // Day 1: 20% deviation (2400 kcal -> delta = 0.20): calPrecision = 100 * (1 - 0.10/0.40) = 75.
+    // Protein is 100g (100% >= 90% -> proteinAdherence = 100).
+    // Day score = round(0.7 * 75 + 0.3 * 100) = round(52.5 + 30) = 83.
+    addMealEntry(s, '2026-11-01', 'lunch', { name: '20pct over', kcal: 2400, protein: 100 })
+
+    // Day 2: 30% deviation (1400 kcal -> delta = 0.30): calPrecision = 100 * (1 - 0.20/0.40) = 50.
+    // Protein is 90g (90% >= 90% -> proteinAdherence = 100).
+    // Day score = round(0.7 * 50 + 0.3 * 100) = round(35 + 30) = 65.
+    addMealEntry(s, '2026-11-02', 'lunch', { name: '30pct under', kcal: 1400, protein: 90 })
+
+    // Day 3: 50% deviation (3000 kcal -> delta = 0.50): calPrecision = 100 * (1 - 0.40/0.40) = 0.
+    // Protein is 90g (proteinAdherence = 100).
+    // Day score = round(0.7 * 0 + 0.3 * 100) = 30.
+    addMealEntry(s, '2026-11-03', 'lunch', { name: '50pct over', kcal: 3000, protein: 90 })
+
+    // Day 4: 60% deviation (>50% -> calPrecision = 0).
+    // Protein is 90g (proteinAdherence = 100).
+    // Day score = round(0.7 * 0 + 0.3 * 100) = 30.
+    addMealEntry(s, '2026-11-04', 'lunch', { name: '60pct over', kcal: 3200, protein: 90 })
+
+    const res = dietConsistencyScore(s, '2026-11-04', 4)
+    expect(res.history[0].score).toBe(83)
+    expect(res.history[1].score).toBe(65)
+    expect(res.history[2].score).toBe(30)
+    expect(res.history[3].score).toBe(30)
+
+    // Composite: round((83 + 65 + 30 + 30) / 4) = round(208 / 4) = 52.
+    expect(res.score).toBe(52)
+    expect(res.tier).toBe('fair')
+    expect(res.label).toBe('Fair')
+  })
+
+  it('evaluates protein adherence proportionally when below 90% of target', () => {
+    const s = {}
+    setNutritionGoals(s, { kcal: 2000, protein: 100 })
+    // Goal protein is 100. 90% threshold is 90g.
+    // If protein is 45g: proteinAdherence = (45 / 90) * 100 = 50.
+    // Kcal is 2000 (delta = 0 -> calPrecision = 100).
+    // Day score = round(0.7 * 100 + 0.3 * 50) = round(70 + 15) = 85.
+    addMealEntry(s, '2026-11-01', 'dinner', { name: 'Low protein', kcal: 2000, protein: 45 })
+
+    // Day 2: 0g protein: proteinAdherence = 0.
+    // Kcal is 2000 (calPrecision = 100).
+    // Day score = round(0.7 * 100 + 0.3 * 0) = 70.
+    addMealEntry(s, '2026-11-02', 'dinner', { name: 'Zero protein', kcal: 2000, protein: 0 })
+
+    const res = dietConsistencyScore(s, '2026-11-02', 2)
+    expect(res.history[0].score).toBe(85)
+    expect(res.history[1].score).toBe(70)
+    // Composite: round((85 + 70) / 2) = round(77.5) = 78
+    expect(res.score).toBe(78)
+    expect(res.tier).toBe('good')
+    expect(res.label).toBe('Good')
+  })
+
+  it('assigns 0 to unlogged days and dilutes the composite score', () => {
+    const s = {}
+    setNutritionGoals(s, { kcal: 2000, protein: 100 })
+    // Log only 1 day out of 7 with perfect adherence (score 100)
+    addMealEntry(s, '2026-11-07', 'lunch', { name: 'Only day', kcal: 2000, protein: 100 })
+
+    const res = dietConsistencyScore(s, '2026-11-07', 7)
+    expect(res.loggedDays).toBe(1)
+    expect(res.totalDays).toBe(7)
+    expect(res.avgKcal).toBe(2000)
+    // Composite score: round(100 / 7) = 14
+    expect(res.score).toBe(14)
+    expect(res.tier).toBe('low')
+    expect(res.label).toBe('Building habit')
+    expect(res.history[6].logged).toBe(true)
+    expect(res.history[6].score).toBe(100)
+    expect(res.history[0].logged).toBe(false)
+    expect(res.history[0].score).toBe(0)
+  })
+
+  it('verifies tier thresholds: optimal (>=85), good (>=70), fair (>=50), low (<50)', () => {
+    const makeScoreRes = targetDayScore => {
+      const s = {}
+      setNutritionGoals(s, { kcal: 2000, protein: 100 })
+      if (targetDayScore === 85) {
+        // calPrecision = 100 (70pts), proteinAdherence = 50 (15pts) -> 85
+        addMealEntry(s, '2026-11-01', 'lunch', { name: 'Meal', kcal: 2000, protein: 45 })
+      } else if (targetDayScore === 70) {
+        // calPrecision = 100 (70pts), proteinAdherence = 0 (0pts) -> 70
+        addMealEntry(s, '2026-11-01', 'lunch', { name: 'Meal', kcal: 2000, protein: 0 })
+      } else if (targetDayScore === 50) {
+        // delta = 0.30 -> kcal 2600 (+30%), protein 45g (50%) -> 35 + 15 = 50
+        addMealEntry(s, '2026-11-01', 'lunch', { name: 'Meal', kcal: 2600, protein: 45 })
+      } else if (targetDayScore === 40) {
+        // delta = 0.50 -> calPrecision = 0. protein = 90g -> proteinAdherence = 100 (30pts) -> dayScore = 30
+        addMealEntry(s, '2026-11-01', 'lunch', { name: 'Meal', kcal: 3000, protein: 90 })
+      }
+      return dietConsistencyScore(s, '2026-11-01', 1)
+    }
+
+    const opt = makeScoreRes(85)
+    expect(opt.score).toBe(85)
+    expect(opt.tier).toBe('optimal')
+    expect(opt.label).toBe('Optimal')
+
+    const good = makeScoreRes(70)
+    expect(good.score).toBe(70)
+    expect(good.tier).toBe('good')
+    expect(good.label).toBe('Good')
+
+    const fair = makeScoreRes(50)
+    expect(fair.score).toBe(50)
+    expect(fair.tier).toBe('fair')
+    expect(fair.label).toBe('Fair')
+
+    const low = makeScoreRes(40)
+    expect(low.score).toBe(30)
+    expect(low.tier).toBe('low')
+    expect(low.label).toBe('Building habit')
+  })
+
+  it('correctly populates history items with date, kcal, goalKcal, logged, score, over, dow, dayNum', () => {
+    const s = {}
+    setNutritionGoals(s, { kcal: 2100, protein: 140 })
+    // '2026-11-06' is a Friday (dow = 5), dayNum = 6
+    addMealEntry(s, '2026-11-06', 'dinner', { name: 'Surplus dinner', kcal: 2500, protein: 150 })
+
+    const res = dietConsistencyScore(s, '2026-11-06', 7)
+    const todayItem = res.history[6]
+    expect(todayItem).toMatchObject({
+      date: '2026-11-06',
+      kcal: 2500,
+      goalKcal: 2100,
+      logged: true,
+      over: true,
+      dow: 5,
+      dayNum: 6,
+    })
+    expect(typeof todayItem.score).toBe('number')
+    expect(todayItem.score).toBeGreaterThan(0)
+
+    const prevItem = res.history[5] // 2026-11-05 is Thursday (dow = 4), dayNum = 5
+    expect(prevItem).toMatchObject({
+      date: '2026-11-05',
+      kcal: 0,
+      goalKcal: 2100,
+      logged: false,
+      over: false,
+      score: 0,
+      dow: 4,
+      dayNum: 5,
+    })
+  })
+})
+

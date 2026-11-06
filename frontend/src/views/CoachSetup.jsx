@@ -64,7 +64,6 @@ export default function CoachSetup() {
   // freely and is only clamped and saved when the field is left.
   const [limits, setLimits] = useState(() => coachLimits(coachLocal))
 
-  useEffect(() => { if (!MOBILE) nav('/settings', { replace: true }) }, [])
   useEffect(() => { getApiKey().then(k => setHasKey(!!k)) }, [])
   // Ask the paired server afresh: the admin may have switched the Coach on since this phone booted.
   useEffect(() => { if (user) refreshConfig() }, [user])

@@ -426,4 +426,40 @@ describe('Nutrition view, food logging, goals & history flows', () => {
     expect(host.querySelector(".nutr-meal[data-meal=\"lunch\"] .nutr-item-t")?.textContent).toContain("Tavuk")
     vi.useRealTimers()
   })
-});
+
+  it('opens 7-day history sheet when clicking top calories window and opens goals sheet when clicking daily goal button', () => {
+    renderApp()
+
+    const calTop = host.querySelector('.nutr-cal-top')
+    expect(calTop).not.toBeNull()
+    expect(calTop.getAttribute('role')).toBe('button')
+    expect(calTop.getAttribute('tabindex')).toBe('0')
+    expect(calTop.getAttribute('aria-label')).toBe('View 7-day history')
+
+    // Click top calories window -> opens history sheet
+    act(() => {
+      calTop.click()
+    })
+
+    let sheet = host.querySelector('#modal-root .sheet')
+    expect(sheet).not.toBeNull()
+    expect(sheet.querySelector('h3')?.textContent).toBe('History & analytics')
+
+    // Close the sheet
+    act(() => {
+      sheet.querySelector('button[aria-label="Close"]').click()
+    })
+    expect(host.querySelector('#modal-root .sheet')).toBeNull()
+
+    // Click daily goal button inside nutr-cal-stats -> opens goals sheet, stopPropagation prevents history sheet
+    const goalBtn = host.querySelector('.nutr-stat.tap')
+    expect(goalBtn).not.toBeNull()
+    act(() => {
+      goalBtn.click()
+    })
+
+    sheet = host.querySelector('#modal-root .sheet')
+    expect(sheet).not.toBeNull()
+    expect(sheet.querySelector('h3')?.textContent).toBe('Daily goals')
+  })
+})

@@ -234,7 +234,19 @@ export default function Nutrition() {
       </div>
 
       <div className="card nutr-summary">
-        <div className="nutr-cal-top">
+        <div
+          className="nutr-cal-top"
+          role="button"
+          tabIndex={0}
+          onClick={openHistory}
+          onKeyDown={e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              openHistory()
+            }
+          }}
+          aria-label={t('View 7-day history')}
+        >
           <div className="nutr-ring-box" role="img" aria-label={t('{0} of {1} kcal', fmtNum(totals.kcal), fmtNum(goals.kcal))}>
             <svg className="nutr-ring-svg" viewBox="0 0 112 112" aria-hidden="true">
               <circle className="nutr-ring-track" cx="56" cy="56" r={RING_R} />
@@ -260,7 +272,14 @@ export default function Nutrition() {
               <span className="nutr-stat-l">{t('Eaten')}</span>
               <span className="nutr-stat-v">{t('{0} kcal', fmtNum(totals.kcal))}</span>
             </div>
-            <button type="button" className="nutr-stat tap" onClick={openGoals}>
+            <button
+              type="button"
+              className="nutr-stat tap"
+              onClick={e => {
+                e.stopPropagation()
+                openGoals()
+              }}
+            >
               <span className="nutr-stat-l">{t('Daily goal')}</span>
               <span className="nutr-stat-v nutr-goal-link">
                 <span>{t('{0} kcal', fmtNum(goals.kcal))}</span>

@@ -30,6 +30,12 @@ import { WrappedHomeCard } from '../components/WrappedEntry.jsx'
 import RecoveryHint from '../components/RecoveryHint.jsx'
 import { ChallengesCard } from '../components/Challenges.jsx'
 import { isOn } from '../lib/modules.js'
+import { nutritionDay, hasLoggedMeals, dayTotals, dietConsistencyScore } from '../lib/nutrition.js'
+import { useCoachGate } from '../lib/use-coach-gate.js'
+import { useUI } from '../store/useUI.js'
+import NutritionFoodSheet from '../components/NutritionFoodSheet.jsx'
+import NutritionGoalsSheet from '../components/NutritionGoalsSheet.jsx'
+import NutritionHistorySheet from '../components/NutritionHistorySheet.jsx'
 
 // Home = what to do now + a quick glance. Deep charts & history live in Stats.
 export default function Home() {
@@ -116,6 +122,84 @@ export default function Home() {
   const on = id => isOn(S, id)
   const bwPoints = S.bodyweight.slice(-30).map(b => ({ t: weighInAt(b), y: b.w, d: b.d }))
 
+  // AI Coach readiness & status computed from today's training and nutrition
+  const hasWorkoutToday = loggedToday.length > 0 || !!doneToday
+  const hasMealsToday = useMemo(() => {
+    try {
+      return hasLoggedMeals(nutritionDay(S, todayISO()))
+    } catch {
+      return false
+    }
+  }, [S.nutritionLogs])
+  const hasPlannedWorkout = todayRoutines.length > 0 && !hasWorkoutToday
+  const gate = useCoachGate()
+  const coachOk = gate.ok
+  const openCoach = prompt => {
+    if (coachOk) {
+      if (prompt) nav("/coach", { state: { prompt } })
+      else nav("/coach")
+    } else {
+      nav("/coach/setup")
+    }
+  }
+  const coachStatusSub = useMemo(() => {
+    if (!coachOk) {
+      return t("AI Coach setup required · Tap to configure")
+    }
+    if (hasWorkoutToday && hasMealsToday) {
+      return t("Today’s workout and macros logged · Analysis ready")
+    }
+    if (hasWorkoutToday && !hasMealsToday) {
+      return t("Workout logged · Log meals for nutrition analysis")
+    }
+    if (hasMealsToday && hasPlannedWorkout) {
+      return t("Meals logged · Workout pending")
+    }
+    return t("Weekly performance & calorie correlation ready")
+  }, [coachOk, hasWorkoutToday, hasMealsToday, hasPlannedWorkout])
+
+  // 7-day Nutrition adherence & consistency score
+  const dietScore = useMemo(() => {
+    return dietConsistencyScore(S, todayISO(), 7)
+  }, [S.nutritionLogs, S.nutritionGoals])
+
+  const todayNutrKcal = useMemo(() => {
+    try {
+      return dayTotals(nutritionDay(S, todayISO())).kcal
+    } catch {
+      return 0
+    }
+  }, [S.nutritionLogs])
+
+  const tierLabelMap = {
+    optimal: t('Optimal'),
+    good: t('Good'),
+    fair: t('Fair'),
+    low: t('Building habit'),
+  }
+  const tierLabel = tierLabelMap[dietScore.tier] || dietScore.label
+
+  const histScaleMax = Math.max(dietScore.goalKcal * 1.15, ...dietScore.history.map(d => d.kcal), 1)
+  const goalLinePct = dietScore.goalKcal > 0
+    ? Math.min(100, Math.round((dietScore.goalKcal / histScaleMax) * 1000) / 10)
+    : 0
+
+  const openAddFood = () => {
+    useUI.getState().openSheet(close => (
+      <NutritionFoodSheet dateISO={todayISO()} close={close} />
+    ))
+  }
+
+  const openNutritionHistory = () => {
+    useUI.getState().openSheet(close => (
+      <NutritionHistorySheet close={close} onSelectDate={() => nav('/nutrition')} />
+    ))
+  }
+
+  const openNutritionGoals = () => {
+    useUI.getState().openSheet(close => <NutritionGoalsSheet close={close} />)
+  }
+
   // today's session shown right under the week strip
   const onToday = () => { if (S.active) nav('/workout'); else if (todayRoutines.length) startFlow(effectiveRoutineIds(S, todayISO())); else dayOverrideSheet(todayISO()) }
   // A chip on the coach week's progress row starts that one routine, in any order. A session
@@ -190,6 +274,151 @@ export default function Home() {
       </div>}
       <SeasonDeco spot="home-hero" />
     </div>
+
+    {/* AI Coach Hero Entry Card (lib/coach.js, views/CoachChat.jsx) */}
+    {on('coach') && (
+      <div className="card tap-host coach-home-card" data-tour="coach-card">
+        <CardHead
+          icon="sparkles"
+          tint="var(--acc)"
+          eyebrow={t('AI Coach')}
+          title={t('Performance & Nutrition Coach')}
+          sub={coachStatusSub}
+          open={{ onClick: () => openCoach() }}
+          action={
+            <Button size="sm" variant="tinted" icon="sparkles" onClick={() => openCoach()}>
+              {coachOk ? t('Ask') : t('Set up')}
+            </Button>
+          }
+        />
+        <div className="coach-home-pills">
+          <button
+            type="button"
+            className="coach-home-pill"
+            onClick={() => openCoach(t('Weekly analysis'))}
+          >
+            <Icon name="chart" />
+            <span>{t('Weekly analysis')}</span>
+          </button>
+          <button
+            type="button"
+            className="coach-home-pill"
+            onClick={() => openCoach(t('Macro status'))}
+          >
+            <Icon name="nutrition" />
+            <span>{t('Macro status')}</span>
+          </button>
+          <button
+            type="button"
+            className="coach-home-pill"
+            onClick={() => openCoach(t('Ask Coach'))}
+          >
+            <Icon name="sparkles" />
+            <span>{coachOk ? t('Ask Coach') : t('Set up')}</span>
+          </button>
+        </div>
+      </div>
+    )}
+
+    {/* Dedicated Nutrition 7-Day & Consistency Card */}
+    {on('nutrition') && (
+      <div className="card tap-host home-nutr-card" data-tour="home-nutrition">
+        <CardHead
+          icon="nutrition"
+          tint="var(--green)"
+          eyebrow={t('Nutrition')}
+          title={t('Diet consistency')}
+          sub={`${dietScore.score}/100 · ${tierLabel} · ${fmtNum(todayNutrKcal)} / ${fmtNum(dietScore.goalKcal)} kcal`}
+          open={{ onClick: () => nav('/nutrition') }}
+          action={
+            <Button size="sm" variant="tinted" icon="chevronRight" onClick={() => nav('/nutrition')}>
+              {t('Nutrition')}
+            </Button>
+          }
+        />
+
+        <div className="home-nutr-score-row">
+          <div className={`home-nutr-score-badge tier-${dietScore.tier}`}>
+            <span className="home-nutr-score-val">{dietScore.score}</span>
+            <span className="home-nutr-score-unit">/100</span>
+          </div>
+          <div className="home-nutr-score-meta">
+            <div className="home-nutr-score-headline">
+              <span className={`home-nutr-tier-dot tier-${dietScore.tier}`} aria-hidden="true" />
+              <span className="home-nutr-tier-name">{tierLabel}</span>
+              <span className="home-nutr-score-sep">·</span>
+              <span className="home-nutr-logged-stat">
+                {tn('{0} of {1} day logged', '{0} of {1} days logged', dietScore.loggedDays, dietScore.totalDays)}
+              </span>
+            </div>
+            <div className="home-nutr-score-sub">
+              {dietScore.loggedDays > 0
+                ? t('7-day average: {0} kcal / day', fmtNum(dietScore.avgKcal))
+                : t('Log food daily to track diet consistency')}
+            </div>
+          </div>
+        </div>
+
+        <div className="nutr-hist-grid" role="group" aria-label={t('7-day nutrition history')}>
+          {dietScore.history.map(d => {
+            const isToday = d.date === todayISO()
+            const fillPct = d.kcal > 0 ? Math.min(100, Math.max(6, Math.round((d.kcal / histScaleMax) * 1000) / 10)) : 0
+            return (
+              <button
+                key={d.date}
+                type="button"
+                className={
+                  'nutr-hday' +
+                  (isToday ? ' today' : '') +
+                  (d.over ? ' over' : '') +
+                  (d.logged ? ' has' : '')
+                }
+                data-hist-date={d.date}
+                aria-label={`${fmtDate(d.date, true)}: ${t('{0} of {1} kcal', fmtNum(d.kcal), fmtNum(d.goalKcal))}`}
+                onClick={() => nav('/nutrition')}
+              >
+                <span className="nutr-hval" aria-hidden="true">
+                  {d.logged ? fmtNum(d.kcal) : '·'}
+                </span>
+                <span className="nutr-hbar-t" aria-hidden="true">
+                  {goalLinePct > 0 && <span className="nutr-hbar-goal" style={{ bottom: `${goalLinePct}%` }} />}
+                  {fillPct > 0 && <span className="nutr-hbar-f" style={{ height: `${fillPct}%` }} />}
+                </span>
+                <span className="nutr-hdow" aria-hidden="true">{t(DAYS[d.dow])}</span>
+                <span className="nutr-hnum" aria-hidden="true">{d.dayNum}</span>
+              </button>
+            )
+          })}
+        </div>
+
+        <div className="home-nutr-pills">
+          <button
+            type="button"
+            className="home-nutr-pill"
+            onClick={openAddFood}
+          >
+            <Icon name="plus" />
+            <span>{t('Log food')}</span>
+          </button>
+          <button
+            type="button"
+            className="home-nutr-pill"
+            onClick={openNutritionHistory}
+          >
+            <Icon name="chart" />
+            <span>{t('7-day history')}</span>
+          </button>
+          <button
+            type="button"
+            className="home-nutr-pill"
+            onClick={openNutritionGoals}
+          >
+            <Icon name="target" />
+            <span>{t('Goals')}</span>
+          </button>
+        </div>
+      </div>
+    )}
 
     {/* Monday: Your week; the 1st: Your month (lib/recap.js). Off in Settings → Look & Home. */}
     <RecapHomeCard S={S} />

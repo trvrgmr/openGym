@@ -602,6 +602,95 @@ export const TASKS = ['create', 'review', 'debrief', 'ask', 'adapt'];
 export const ADAPT_REASONS = ['pain', 'busy', 'short', 'great', 'tired', 'other'];
 export const ADAPT_RECENT = 3;
 
+
+export function cleanNutrition(S, opts = {}, now = Date.now()) {
+  if (opts && opts.nutrition && typeof opts.nutrition === 'object') {
+    const n = opts.nutrition;
+    const raw = n.raw || n;
+    const out = {};
+    if (raw.today && typeof raw.today === 'object') {
+      out.today = {
+        date: day(raw.today.date),
+        kcal: count(raw.today.kcal, 0, 50000) ?? 0,
+        targetKcal: count(raw.today.targetKcal, 0, 50000) ?? 0,
+        deltaKcal: typeof raw.today.deltaKcal === 'number' && Number.isFinite(raw.today.deltaKcal) ? Math.round(raw.today.deltaKcal) : 0,
+        protein: count(raw.today.protein, 0, 5000) ?? 0,
+        carbs: count(raw.today.carbs, 0, 5000) ?? 0,
+        fat: count(raw.today.fat, 0, 5000) ?? 0,
+        hasLoggedMeals: Boolean(raw.today.hasLoggedMeals),
+        hasLoggedWorkouts: Boolean(raw.today.hasLoggedWorkouts),
+      };
+    }
+    if (raw.trends && typeof raw.trends === 'object') {
+      out.trends = raw.trends;
+    }
+    if (raw.alignment && typeof raw.alignment === 'object') {
+      out.alignment = raw.alignment;
+    }
+    if (typeof n.summaryMarkdown === 'string') {
+      out.summaryMarkdown = n.summaryMarkdown.slice(0, MAX_NOTE_CHARS);
+    }
+    if (n.compactJson) {
+      out.compactJson = typeof n.compactJson === 'string' ? n.compactJson.slice(0, MAX_NOTE_CHARS) : n.compactJson;
+    }
+    if (Object.keys(out).length) return out;
+  }
+
+  const goalsRaw = S?.nutritionGoals;
+  const hasGoals = goalsRaw && typeof goalsRaw === 'object' && Object.keys(goalsRaw).length > 0;
+  const logsRaw = S?.nutritionLogs;
+  const hasLogs = logsRaw && typeof logsRaw === 'object' && Object.keys(logsRaw).length > 0;
+
+  if (hasGoals || hasLogs) {
+    const goals = hasGoals ? {
+      kcal: count(goalsRaw.kcal, 0, 50000) ?? 0,
+      protein: count(goalsRaw.protein, 0, 5000) ?? 0,
+      carbs: count(goalsRaw.carbs, 0, 5000) ?? 0,
+      fat: count(goalsRaw.fat, 0, 5000) ?? 0,
+    } : null;
+
+    const recentLogs = {};
+    if (hasLogs) {
+      const todayISO = iso(new Date(Number.isFinite(now) ? now : Date.now()));
+      const d = new Date(todayISO + 'T12:00:00');
+      for (let i = 0; i < 7; i++) {
+        const cur = new Date(d);
+        cur.setDate(d.getDate() - i);
+        const isoStr = iso(cur);
+        const dayRecord = logsRaw[isoStr];
+        if (dayRecord && typeof dayRecord === 'object' && dayRecord.meals) {
+          let kcal = 0, protein = 0, carbs = 0, fat = 0;
+          for (const m of ['breakfast', 'lunch', 'dinner', 'snacks']) {
+            for (const item of (Array.isArray(dayRecord.meals[m]) ? dayRecord.meals[m] : [])) {
+              if (item) {
+                kcal += Number(item.kcal) || 0;
+                protein += Number(item.protein) || 0;
+                carbs += Number(item.carbs) || 0;
+                fat += Number(item.fat) || 0;
+              }
+            }
+          }
+          if (kcal > 0 || protein > 0 || carbs > 0 || fat > 0) {
+            recentLogs[isoStr] = {
+              kcal: Math.round(kcal),
+              protein: Math.round(protein * 10) / 10,
+              carbs: Math.round(carbs * 10) / 10,
+              fat: Math.round(fat * 10) / 10,
+            };
+          }
+        }
+      }
+    }
+
+    return {
+      ...(goals ? { goals } : {}),
+      ...(Object.keys(recentLogs).length ? { recentLogs } : {}),
+    };
+  }
+
+  return null;
+}
+
 export function build(S, opts = {}) {
   if (typeof opts.handle !== 'string' || !opts.handle) throw new Error('payload.build: opts.handle is required');
   const coach = S.coach || {};
@@ -765,6 +854,8 @@ export function build(S, opts = {}) {
     const said = conversation(coach, [opts.note, opts.refine]);
     if (said.length) p.conversation = said;
   }
+  const nutrition = cleanNutrition(S, opts, now);
+  if (nutrition) p.nutrition = nutrition;
   return p;
 }
 

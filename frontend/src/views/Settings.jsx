@@ -275,7 +275,14 @@ export default function Settings({ page = null, find = null, via = null, entryKe
       const info = await checkForUpdate()
       setUpdateInfo(info)
       if (info?.hasUpdate) {
-        openUpdateModal(info)
+        if (MOBILE && info.apkUrl) {
+          openUpdateModal(info)
+        } else {
+          toast(t('Update v{0} is available!', info.latestVersion), {
+            action: t('Download'),
+            onAction: () => window.open(RELEASES_PAGE, '_blank', 'noopener'),
+          })
+        }
       } else {
         toast(t('You have the latest version.'))
         forgetDownloadedUpdate()
@@ -288,7 +295,7 @@ export default function Settings({ page = null, find = null, via = null, entryKe
 
   const onUpdateRowClick = () => {
     if (!updateInfo?.hasUpdate) return
-    if (updateInfo.apkUrl) {
+    if (updateInfo.apkUrl && MOBILE) {
       openUpdateModal(updateInfo)
       confirmSheet?.({
         title: t('Update to {0}?', updateInfo.latestVersion),
@@ -1095,20 +1102,27 @@ export default function Settings({ page = null, find = null, via = null, entryKe
           release is newer (checksum verified, see onUpdateRowClick). On the web the app updates
           with its server, so the row points at the APK for the phone instead. iOS and the Google
           Play build are updated by their store. */}
-      <Section footer={MOBILE ? (selfUpdate ? t('Releases are checked on GitHub. The download is verified against its checksum before the installer opens.') : fdroid ? t('F-Droid installs the updates for this build.') : null) : t('The web app updates together with your server. The Android app installs its own updates from here.')}>
-        {/* The sideloaded APK comes in three kinds that differ only in the animations built in
-            (lib/apk-variant.js): which one this is, so nobody has to guess from the file size. */}
+      <Section footer={MOBILE ? (selfUpdate ? t('Releases are checked on GitHub. The download is verified against its checksum before the installer opens.') : fdroid ? t('F-Droid installs the updates for this build.') : null) : t('The web app updates together with your server. The Android app installs its own updates from GitHub Releases.')}>
         <Row icon="info" iconTint="var(--grey)" title={t('Version')} value={'v' + __APP_VERSION__}
           subtitle={MOBILE && selfUpdate ? t('{0} APK, animations at {1} px', VARIANT_NAMES[APK_VARIANT], BUILTIN_PX) : undefined} />
-        {MOBILE
-          ? selfUpdate && <Row icon="download" iconTint="var(--green)"
+        {MOBILE ? (
+          selfUpdate && <Row icon="download" iconTint="var(--green)"
+            title={updateInfo?.hasUpdate ? t('Update to openGym v{0}', updateInfo.latestVersion) : t('Check for updates')}
+            subtitle={checking ? t('Checking…') : (updateInfo?.hasUpdate ? t('New version available!') : t('You have v{0}', __APP_VERSION__))}
+            accessory="chevron"
+            onClick={() => (updateInfo?.hasUpdate ? onUpdateRowClick() : checkNow())} />
+        ) : (
+          <>
+            <Row icon="refresh" iconTint="var(--blue)"
               title={updateInfo?.hasUpdate ? t('Update to openGym v{0}', updateInfo.latestVersion) : t('Check for updates')}
-              subtitle={checking ? t('Checking…') : t('You have v{0}', __APP_VERSION__)}
+              subtitle={checking ? t('Checking…') : (updateInfo?.hasUpdate ? t('New version available!') : t('You have v{0}', __APP_VERSION__))}
               accessory="chevron"
               onClick={() => (updateInfo?.hasUpdate ? onUpdateRowClick() : checkNow())} />
-          : <Row icon="download" iconTint="var(--green)" title={t('Get the Android app')}
-              subtitle={t('Download the APK from opengym.ch')} accessory="chevron"
-              onClick={() => window.open('https://opengym.ch/#download', '_blank', 'noopener')} />}
+            <Row icon="download" iconTint="var(--green)" title={t('Get the Android app')}
+              subtitle={t('Download the APK from GitHub Releases')} accessory="chevron"
+              onClick={() => window.open(RELEASES_PAGE, '_blank', 'noopener')} />
+          </>
+        )}
       </Section>
       {/* The F-Droid build has no Wear OS link (it would need Google Play services, which F-Droid
           leaves out): said here rather than having a watch that silently never connects. */}
@@ -1128,25 +1142,7 @@ export default function Settings({ page = null, find = null, via = null, entryKe
             onClick={() => (useStore.getState().S.active ? toast(t('Finish your workout first, then the tour is all yours.')) : startTour(null, f))} />
         })}
       </Section>
-      {/* Support: the project's own donation pages, and on the iPhone a straight line to writing a
-          review. Plain links, no pop-up asking for anything (App Store 5.6.1). The Google Play build
-          shows only its rating link: Play's payments policy wants Play billing for anything paid
-          inside an app, donations to a project that isn't a registered charity included, so the
-          coffee links stay on the APK, the iPhone and the web (docs/APP_STORES.md). */}
-      <Section title={t('Support openGym')} footer={play ? undefined : t('openGym is free: no ads, no subscriptions, no tracking. A coffee keeps it that way.')}>
-        {MOBILE && ios && <Row icon="star" iconTint="var(--orange)" title={t('Rate openGym on the App Store')} accessory="chevron"
-          onClick={() => window.open('https://apps.apple.com/app/id6822275400?action=write-review', '_blank', 'noopener')} />}
-        {play && <Row icon="star" iconTint="var(--orange)" title={t('Rate openGym on Google Play')} accessory="chevron"
-          onClick={() => window.open('https://play.google.com/store/apps/details?id=ch.duartesantos.opengym', '_blank', 'noopener')} />}
-        {!play && <>
-          <Row icon="heart" iconTint="var(--pink)" title={t('Buy me a coffee')} subtitle="Buy Me a Coffee" accessory="chevron"
-            onClick={() => window.open('https://buymeacoffee.com/duartesantos', '_blank', 'noopener')} />
-          <Row icon="heart" iconTint="var(--blue)" title="Ko-fi" accessory="chevron"
-            onClick={() => window.open('https://ko-fi.com/opengym', '_blank', 'noopener')} />
-          <Row icon="heart" iconTint="var(--purple)" title="GitHub Sponsors" accessory="chevron"
-            onClick={() => window.open('https://github.com/sponsors/DuarteSantos8', '_blank', 'noopener')} />
-        </>}
-      </Section>
+
       {/* "Add to Home screen": not inside the phone app, and not once it is installed. Safari's
           Share menu only on Apple (an iPad says Macintosh too); Windows and Linux get Chrome's
           install icon instead of an iPhone tip. */}
@@ -1160,10 +1156,10 @@ export default function Settings({ page = null, find = null, via = null, entryKe
           which build you are running, or whether an update actually installed. */}
       <div className="dim small sp-version">
         openGym v{__APP_VERSION__} · {t('free & open source (AGPL v3)')}<br />
-        <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">{t('Source code')}</a><br />
+        <a href="https://github.com/trvrgmr/openGym" target="_blank" rel="noopener">{t('Source code')}</a><br />
         {/* Attribution the media licence asks for word for word (agreement §8c), so it is not translated */}
         Exercise media © Aliaksandr Makatserchyk, <a href="https://gymvisual.com/" target="_blank" rel="noopener">Gym visual</a>, gymvisual.com.
-        Media licensed for use in openGym only; see <a href="https://github.com/DuarteSantos8/openGym/blob/main/NOTICE.md" target="_blank" rel="noopener">NOTICE.md</a>
+        Media licensed for use in openGym only; see <a href="https://github.com/trvrgmr/openGym/blob/main/NOTICE.md" target="_blank" rel="noopener">NOTICE.md</a>
       </div>
     </>,
 

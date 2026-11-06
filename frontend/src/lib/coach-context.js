@@ -8,6 +8,12 @@
 // otherwise be answered without the workout it is about. Only the numbers go: exercise ids,
 // planned or extra, targets and logged sets — no notes, media or device bookkeeping.
 import { isWarmupRow } from './workout-model.js'
+import {
+  buildUnifiedCoachContext,
+  nutritionForCoach,
+} from './coach-context-builder.js'
+
+export { buildUnifiedCoachContext, nutritionForCoach }
 
 const SET_KEYS = ['w', 'r', 'sec', 'min', 'speed', 'rir', 'rpe']
 

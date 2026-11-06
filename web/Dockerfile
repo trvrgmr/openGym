@@ -7,7 +7,7 @@
 # QEMU — and QEMU-emulated npm installs are known to corrupt esbuild/rollup's platform-
 # specific native binaries, which is what breaks `vite build` with unrelated-looking
 # module-resolution errors.
-FROM --platform=$BUILDPLATFORM node:22.23.4-alpine AS build
+FROM node:22.23.4-alpine AS build
 # The frontend sits at /app/frontend, not /app: the Coach's runtime-neutral core lives in
 # api/coach/core and is imported from frontend/src as ../../../api/coach/core/*, so the two
 # have to keep the same relative position they have in the repository. Copying frontend/ alone
@@ -73,7 +73,7 @@ COPY web/nginx.conf.template /etc/nginx/templates/default.conf.template
 # Stops the container at start-up on a BASE_PATH the config cannot serve ("/gym/", "gym"), instead
 # of a server that 404s under the prefix. nginx's entrypoint runs these scripts in order; 05 is
 # before the template rendering at 20.
-COPY --chmod=755 web/05-check-base-path.sh /docker-entrypoint.d/
+COPY web/05-check-base-path.sh /docker-entrypoint.d/
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
 # The exercise stills and animations, 180 px, licensed from Gym visual for openGym only: see
 # catalogue/media/NOTICE.md. They ship inside the image; nothing is downloaded at start-up.

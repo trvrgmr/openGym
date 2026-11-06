@@ -10,7 +10,7 @@ import { MOBILE } from './mobile.js'
 import { APK_VARIANTS, APK_VARIANT } from './apk-variant.js'
 import { UPDATE_CONFIG } from '../services/updateService.js'
 
-const DEFAULT_REPO = 'DuarteSantos8/openGym'
+const DEFAULT_REPO = 'trvrgmr/openGym'
 export const REPO = (UPDATE_CONFIG?.GITHUB_OWNER && UPDATE_CONFIG?.GITHUB_REPO && UPDATE_CONFIG.GITHUB_OWNER !== 'GITHUB_KULLANICI_ADIN' && UPDATE_CONFIG.GITHUB_REPO !== 'REPO_ADIN')
   ? `${UPDATE_CONFIG.GITHUB_OWNER}/${UPDATE_CONFIG.GITHUB_REPO}`
   : DEFAULT_REPO
@@ -79,12 +79,8 @@ const tagged = (name, tag) => new RegExp(`(^|[-_.])${tag}([-_.]|$)`, 'i').test(n
 /** Which kind an APK file name is: 'hd', 'plus' or 'standard'. */
 export const apkKind = name => tagged(name, 'hd') ? 'hd' : tagged(name, 'plus') ? 'plus' : 'standard'
 export function pickApk(assets, variant = APK_VARIANT) {
-  // If variant-specific apk exists, pick it; otherwise pick any .apk asset
-  let apk = assets.find(a => /\.apk$/i.test(a.name) && apkKind(a.name) === variant) || null
-  if (!apk) {
-    apk = assets.find(a => /\.apk$/i.test(a.name)) || null
-  }
-  const hash = apk ? assets.find(a => a.name === `${apk.name}.sha256` || /\.sha256$/i.test(a.name)) || null : null
+  const apk = assets.find(a => /\.apk$/i.test(a.name) && apkKind(a.name) === variant) || null
+  const hash = apk ? assets.find(a => a.name === `${apk.name}.sha256`) || null : null
   return { apk, hash }
 }
 

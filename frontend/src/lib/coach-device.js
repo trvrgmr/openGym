@@ -44,7 +44,8 @@ export const coachLimits = d => {
 let cache = null
 export async function loadCoachDevice() {
   if (cache) return cache
-  const saved = await readJsonFile(FILE)
+  let saved = await readJsonFile(FILE)
+  if (!saved && typeof localStorage !== 'undefined') { try { saved = JSON.parse(localStorage.getItem(FILE)) } catch {} }
   cache = { ...DEFAULTS, ...(saved && typeof saved === 'object' ? saved : {}) }
   if (!COACH_MODES.includes(cache.mode)) cache.mode = 'off'
   return cache
@@ -57,6 +58,7 @@ export async function saveCoachDevice(patch) {
   if (patch && patch.limits) next.limits = coachLimits({ limits: { ...coachLimits(cur), ...patch.limits } })
   cache = next
   await writeJsonFile(FILE, next)
+  if (typeof localStorage !== 'undefined') { try { localStorage.setItem(FILE, JSON.stringify(next)) } catch {} }
   return next
 }
 /** The part of it a UI may show: never the pending proposal, never the handle. */

@@ -3276,8 +3276,8 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 
 /* ------------------------------------------------------------ nutrition -- */
 .nutr-summary{padding:16px}
-.nutr-cal-top{display:flex;align-items:center;gap:18px}
-.nutr-ring-box{position:relative;width:112px;height:112px;flex:none;display:grid;place-items:center}
+.nutr-cal-top{display:flex;align-items:center;gap:18px;cursor:pointer}
+.nutr-ring-box{position:relative;width:112px;height:112px;flex:none;display:grid;place-items:center;cursor:pointer}
 .nutr-ring-svg{width:112px;height:112px;transform:rotate(-90deg);display:block}
 .nutr-ring-track{fill:none;stroke:var(--surface-2);stroke-width:10}
 .nutr-ring-arc{fill:none;stroke:var(--acc);stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset var(--med) var(--ease)}
@@ -3424,3 +3424,31 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .nutr-tag{display:inline-flex;align-items:center;padding:2px 6px;border-radius:99px;font-size:var(--fs-caption2);font-weight:600}
 .nutr-tag.on{background:var(--acc-soft);color:var(--acc-ink)}
 .nutr-tag.over{background:rgba(255,149,0,0.15);color:var(--orange-ink)}
+ 
+/* ---------- Nutrition on Home ---------- */
+.home-nutr-card{position:relative}
+.home-nutr-score-row{display:flex;align-items:center;gap:12px;margin-top:14px;padding:10px 12px;border-radius:var(--r-md);background:var(--surface-2)}
+.home-nutr-score-badge{display:inline-flex;align-items:baseline;gap:2px;padding:6px 12px;border-radius:99px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+.home-nutr-score-badge.tier-optimal{background:rgba(48,209,88,0.16);color:var(--green)}
+.home-nutr-score-badge.tier-good{background:rgba(10,132,255,0.16);color:var(--blue)}
+.home-nutr-score-badge.tier-fair{background:rgba(255,159,10,0.16);color:var(--orange)}
+.home-nutr-score-badge.tier-low{background:var(--surface-3);color:var(--label-2)}
+.home-nutr-score-val{font-size:20px;line-height:1}
+.home-nutr-score-unit{font-size:var(--fs-caption);opacity:.8}
+.home-nutr-score-meta{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.home-nutr-score-headline{display:flex;align-items:center;gap:6px;font-size:var(--fs-subhead);font-weight:600;color:var(--label)}
+.home-nutr-tier-dot{width:7px;height:7px;border-radius:99px;flex:none}
+.home-nutr-tier-dot.tier-optimal{background:var(--green)}
+.home-nutr-tier-dot.tier-good{background:var(--blue)}
+.home-nutr-tier-dot.tier-fair{background:var(--orange)}
+.home-nutr-tier-dot.tier-low{background:var(--label-3)}
+.home-nutr-tier-name{color:var(--label)}
+.home-nutr-score-sep{color:var(--label-3)}
+.home-nutr-logged-stat{font-size:var(--fs-footnote);font-weight:500;color:var(--label-2)}
+.home-nutr-score-sub{font-size:var(--fs-caption);color:var(--label-2);line-height:1.25}
+.home-nutr-pills{display:flex;gap:8px;overflow-x:auto;margin-top:14px;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.home-nutr-pills::-webkit-scrollbar{display:none}
+.home-nutr-pill{display:inline-flex;align-items:center;gap:6px;padding-block:6px;padding-inline:12px;border-radius:99px;font-size:var(--fs-footnote);font-weight:500;line-height:1.2;white-space:nowrap;color:var(--green);background:color-mix(in srgb,var(--green) 10%,var(--surface-2));border:var(--hair) solid color-mix(in srgb,var(--green) 20%,transparent);cursor:pointer;transition:transform var(--fast) var(--ease),background var(--fast)}
+.home-nutr-pill:active{transform:scale(var(--press-scale))}
+.home-nutr-pill .icn{font-size:var(--fs-caption);flex:none}
+

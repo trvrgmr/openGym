@@ -10,7 +10,7 @@ import { todayISO } from '../lib/format.js'
 // The chat is where a plan is imported. These pin that the Import button applies the pending
 // plan through the store, writes the decision into the thread, and leaves today startable.
 const mocks = vi.hoisted(() => {
-  const state = { S: null, pending: null, job: null, community: false, maxMessageLen: 2200, nav: vi.fn(), toast: vi.fn(), openSheet: vi.fn(), refresh: vi.fn() }
+  const state = { S: null, pending: null, job: null, community: false, maxMessageLen: 2200, nav: vi.fn(), toast: vi.fn(), openSheet: vi.fn(), refresh: vi.fn(), askCoach: vi.fn(() => Promise.resolve({})) }
   state.storeSnapshot = () => ({
     S: state.S,
     user: { id: 'u1' },
@@ -33,11 +33,12 @@ vi.mock('../store/useUI.js', () => {
   useUI.getState = mocks.uiSnapshot
   return { useUI }
 })
-vi.mock('react-router-dom', () => ({ useNavigate: () => mocks.nav }))
+vi.mock('react-router-dom', () => ({ useNavigate: () => mocks.nav, useLocation: () => ({ state: null }) }))
 vi.mock('../lib/coach-api.js', () => ({
   useCoachStatus: () => ({ pending: mocks.pending, job: mocks.job, cap: null, loading: false, lastError: null, last: null, refresh: mocks.refresh, maxMessageLen: mocks.maxMessageLen }),
   resolvePending: vi.fn(() => Promise.resolve({})),
   refinePlan: vi.fn(() => Promise.resolve({})),
+  askCoach: (...a) => mocks.askCoach(...a),
   requestReview: vi.fn(() => Promise.resolve({})),
   requestDebrief: vi.fn(() => Promise.resolve({})),
   cohortStats: vi.fn(() => Promise.resolve({ ok: false, enabled: true, sharing: false })),
@@ -231,6 +232,19 @@ describe('the Coach chat', () => {
     expect(byText(/Last workout/)).toBeFalsy()          // no workout logged yet
     await mount(null, { id: 'j1', kind: 'review', state: 'running', startedAt: Date.now() })
     expect(byText(/Review my training/)).toBeFalsy()
+  })
+
+  it('offers sports nutrition starter chips and triggers askCoach when clicked', async () => {
+    await mount(null)
+    const c1 = byText(/Son 7 günlük kalori ve antrenman performansımı analiz et/)
+    const c2 = byText(/Bugünkü makrolarım antrenman hacmime uygun mu\?/)
+    const c3 = byText(/Güç artışı \/ toparlanma için beslenmemde neyi düzeltmeliyim\?/)
+    expect(c1).toBeTruthy()
+    expect(c2).toBeTruthy()
+    expect(c3).toBeTruthy()
+    await click(c1)
+    expect(mocks.askCoach).toHaveBeenCalledWith('Son 7 günlük kalori ve antrenman performansımı analiz et')
+    expect(mocks.S.coach.chat.at(-1)).toMatchObject({ role: 'user', kind: 'text', text: 'Son 7 günlük kalori ve antrenman performansımı analiz et' })
   })
 
   it('offers the comparison only when the instance allows it', async () => {

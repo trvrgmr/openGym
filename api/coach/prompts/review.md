@@ -1,6 +1,6 @@
 # Task: review their training and propose plan changes
 
-Read `window` (what they actually did), `aggregates` (stalls, adherence, coverage), `bodyweight`, and `userNote` if present. Then decide whether the **plan** should change.
+Read `window` (what they actually did), `aggregates` (stalls, adherence, coverage), `bodyweight`, `nutrition` (when logged, including 7-day/14-day caloric averages, protein adequacy per kg bodyweight, carbohydrate availability, and `summaryMarkdown`/`unifiedContext` if present), and `userNote` if present. Then decide whether the **plan** should change.
 
 If there is nothing to read — no sessions in `window`, empty `aggregates` — and no actionable request in `userNote`, the honest answer is `nochange` with a `reading` that says the plan has not been trained yet. Do not invent training evidence.
 
@@ -13,6 +13,7 @@ Use `conversation` to resolve references such as "what you suggested", without t
 Change something when the data says so:
 
 - An exercise with `stalls ≥ 2`, or top sets consistently at RIR ≤ 0.5 / RPE ≥ 9.5 — the prescription is too ambitious, or the exercise has stopped fitting. Swap it, or cut a set.
+- **Nutrition and progressive overload correlation**: Evaluate if progressive overload stalls correlate with an energy deficit or inadequate dietary intake. When stalled lifts or declining performance coincide with a caloric deficit, low calorie days, or protein intake below evidence-based targets (<1.6 g/kg), recognize that the movement itself may not be flawed—recovery and glycogen availability are constrained. Avoid blindly removing core compound lifts; instead, manage fatigue by trimming junk volume or reducing a set, and provide actionable sports-nutrition correlation insights in `notes` (e.g., "+30-50g carbs pre-workout on heavy days", "+20g protein daily", or adjusting deficit magnitude). If training was logged but nutrition unlogged, explicitly note that nutrition data was unlogged rather than assuming zero calories.
 - Sessions consistently rescheduled off a weekday, or a planned day never trained — move it in `week` rather than letting the plan lie.
 - Sessions running well over `coachProfile.sessionMin` — cut volume or superset.
 - A body part with no work in the window while others get plenty — add something, or rebalance.
@@ -29,7 +30,7 @@ Change something when the data says so:
 **Change nothing when nothing warrants it.** A plan that is working and a lifter who is progressing need no interference, and inventing a change to look useful is the fastest way to lose their trust. In that case answer:
 
 ```
-{ "coach_contract": 1, "nochange": true, "reading": "<a short honest paragraph on how the block went>", "changes": [] }
+{ "coach_contract": 1, "nochange": true, "reading": "<a short honest paragraph on how the block went, including sports-nutrition correlation insights if stalls or fatigue coincide with nutrition intake>", "changes": [] }
 ```
 
 Prefer few, high-conviction changes over many small ones. Never propose more than about six.
@@ -51,7 +52,7 @@ Prefer few, high-conviction changes over many small ones. Never propose more tha
       "why": "<1-3 sentences naming the evidence: the user's request, the stall count, the effort trend, the missed days>"
     }
   ],
-  "notes": ["<advice with no plan change attached>"]
+  "notes": ["<advice with no plan change attached, including sports-nutrition correlation insights (energy balance, protein per kg, carb timing) alongside routine changes>"]
 }
 ```
 

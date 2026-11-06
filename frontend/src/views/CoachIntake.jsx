@@ -83,7 +83,7 @@ export default function CoachIntake() {
   const set = patch => setP(v => ({ ...v, ...patch }))
 
   const gate = useCoachGate()
-  useEffect(() => { if (gate.known && !gate.ok) nav('/home', { replace: true }) }, [gate.known, gate.ok])
+  useEffect(() => { if (gate.known && !gate.ok) nav('/coach/setup', { replace: true }) }, [gate.known, gate.ok])
   if (!gate.ok) return null
 
   const key = STEPS[step]

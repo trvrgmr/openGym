@@ -43,16 +43,16 @@ export async function secureGet(key) {
   if (p) {
     try { const v = await withTimeout(p.get(key)); return typeof v === 'string' && v ? v : null } catch { /* fall through */ }
   }
-  return memory.get(key) || null
+  return memory.get(key) || (typeof localStorage !== 'undefined' ? localStorage.getItem(key) : null) || null
 }
 export async function secureSet(key, value) {
   const v = String(value || '').trim()
   if (!v) return secureRemove(key)
   const { store: p } = await plugin()
   if (p) {
-    try { await withTimeout(p.set(key, v)); memory.delete(key); return } catch { /* fall through */ }
+    try { await withTimeout(p.set(key, v)); memory.delete(key); try { localStorage.removeItem(key) } catch {}; return } catch { /* fall through */ }
   }
-  memory.set(key, v)
+  memory.set(key, v); try { localStorage.setItem(key, v) } catch {}
 }
 export async function secureRemove(key) {
   const { store: p } = await plugin()

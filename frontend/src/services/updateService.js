@@ -25,7 +25,7 @@ export const UPDATE_CONFIG = {
  */
 export const CURRENT_VERSION = typeof __APP_VERSION__ !== 'undefined'
   ? __APP_VERSION__
-  : (pkg?.version || '1.0.0')
+  : (pkg?.version || '1.0.1')
 
 /**
  * Semantik versiyonlama (semver) karşılaştırma mantığı.

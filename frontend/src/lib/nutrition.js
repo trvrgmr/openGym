@@ -1,4 +1,4 @@
-import { uid } from './format.js'
+import { uid, todayISO } from './format.js'
 
 export const DEFAULT_NUTRITION_GOALS = Object.freeze({
   kcal: 2200,
@@ -496,3 +496,106 @@ export function recentFoodsFromLogs(S, limit = 15) {
   }
   return out
 }
+
+/**
+ * Calculates a 0-100 diet adherence score over the last N days (default 7).
+ * Evaluates calorie precision (70%) and protein adherence (30%) on logged days.
+ */
+export function dietConsistencyScore(S, endISO, days = 7) {
+  const resolvedEnd = ISO.test(String(endISO || '')) ? String(endISO) : todayISO()
+  const dNum = Math.trunc(Number(days))
+  const count = Number.isFinite(dNum) && dNum > 0 ? Math.min(365, dNum) : 7
+  const goals = nutritionGoalsOf(S)
+  const targetKcal = goals.kcal
+  const targetProtein = goals.protein
+
+  const history = []
+  let dayScoresSum = 0
+  let loggedDays = 0
+  let loggedKcalSum = 0
+
+  for (let i = count - 1; i >= 0; i--) {
+    const date = shiftISO(resolvedEnd, -i)
+    const day = nutritionDay(S, date)
+    const tot = dayTotals(day)
+    const logged = hasLoggedMeals(day)
+
+    let dayScore = 0
+    if (logged) {
+      loggedDays += 1
+      loggedKcalSum += tot.kcal
+
+      // Calorie precision (70% weight of the day)
+      let calPrecision = 0
+      if (targetKcal > 0) {
+        const delta = Math.abs(tot.kcal - targetKcal) / targetKcal
+        if (delta <= 0.10) {
+          calPrecision = 100
+        } else if (delta <= 0.50) {
+          calPrecision = Math.max(0, 100 * (1 - (delta - 0.10) / 0.40))
+        } else {
+          calPrecision = 0
+        }
+      }
+
+      // Protein adherence (30% weight of the day)
+      let proteinAdherence = 0
+      if (targetProtein > 0) {
+        if (tot.protein >= 0.9 * targetProtein) {
+          proteinAdherence = 100
+        } else {
+          proteinAdherence = Math.max(0, Math.min(100, (tot.protein / (0.9 * targetProtein)) * 100))
+        }
+      } else {
+        proteinAdherence = 100
+      }
+
+      dayScore = Math.round(0.7 * calPrecision + 0.3 * proteinAdherence)
+    }
+
+    dayScoresSum += dayScore
+
+    const dObj = new Date(date + 'T12:00:00')
+    const dow = Number.isNaN(dObj.getTime()) ? 0 : dObj.getDay()
+    const dayNum = Number(date.slice(8, 10)) || 0
+
+    history.push({
+      date,
+      kcal: tot.kcal,
+      goalKcal: targetKcal,
+      logged,
+      score: dayScore,
+      over: Boolean(targetKcal > 0 && tot.kcal > targetKcal),
+      dow,
+      dayNum,
+    })
+  }
+
+  const score = Math.min(100, Math.max(0, Math.round(dayScoresSum / count)))
+  const avgKcal = loggedDays > 0 ? Math.round(loggedKcalSum / loggedDays) : 0
+
+  let tier = 'low'
+  let label = 'Building habit'
+  if (score >= 85) {
+    tier = 'optimal'
+    label = 'Optimal'
+  } else if (score >= 70) {
+    tier = 'good'
+    label = 'Good'
+  } else if (score >= 50) {
+    tier = 'fair'
+    label = 'Fair'
+  }
+
+  return {
+    score,
+    loggedDays,
+    totalDays: count,
+    avgKcal,
+    goalKcal: targetKcal,
+    tier,
+    label,
+    history,
+  }
+}
+

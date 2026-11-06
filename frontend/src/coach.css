@@ -309,3 +309,44 @@
 .adapt-ended{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
 .pcard-chg-m{margin-top:4px;line-height:1.4}
 .adapt-reasons .chip{text-transform:none}
+
+/* ---------- AI Coach on Home ---------- */
+.coach-home-card{
+  position:relative;
+  background:var(--surface);
+  border:var(--hair) solid var(--sep);
+  border:var(--hair) solid color-mix(in srgb,var(--acc) 28%,var(--sep));
+  box-shadow:0 4px 20px -6px rgba(0,0,0,0.25);
+  box-shadow:0 4px 20px -6px color-mix(in srgb,var(--acc) 14%,transparent);
+}
+.coach-home-card .card-head-title{color:var(--label)}
+.coach-home-pills{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin-top:12px;
+  padding-bottom:2px;
+  -webkit-overflow-scrolling:touch;
+}
+.coach-home-pills::-webkit-scrollbar{display:none}
+.coach-home-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding-block:6px;
+  padding-inline:12px;
+  border-radius:99px;
+  font-size:var(--fs-footnote);
+  font-weight:500;
+  line-height:1.2;
+  white-space:nowrap;
+  color:var(--acc-ink);
+  background:rgba(128,128,128,0.08);
+  background:color-mix(in srgb,var(--acc) 10%,var(--surface-2));
+  border:var(--hair) solid transparent;
+  border:var(--hair) solid color-mix(in srgb,var(--acc) 20%,transparent);
+  cursor:pointer;
+  transition:transform var(--fast) var(--ease),background var(--fast);
+}
+.coach-home-pill:active{transform:scale(var(--press-scale))}
+.coach-home-pill .icn{font-size:var(--fs-caption);flex:none}

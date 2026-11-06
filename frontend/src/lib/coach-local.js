@@ -32,6 +32,7 @@ import { getApiKey } from './coach-secrets.js'
 import { loadCoachDevice, saveCoachDevice, coachLimits } from './coach-device.js'
 import { planHash } from './coach.js'
 import { todayISO } from './format.js'
+import { nutritionForCoach } from './coach-context.js'
 import { t, getLang } from './i18n.js'
 
 export const ADAPTERS = { anthropic, openai, gemini, compatible }
@@ -100,28 +101,28 @@ export async function localStatus() {
   return { job, pending: (await loadCoachDevice()).pending || null, cap: await capState(), lastError, last, maxMessageLen: coachLimits(d).maxMessageLen }
 }
 
-export const localReview = async (S, note) => {
+export const localReview = async (S, note, nutrition) => {
   const d = await loadCoachDevice()
-  return start(S, 'review', { note: note ? String(note).slice(0, coachLimits(d).maxMessageLen) : null })
+  return start(S, 'review', { note: note ? String(note).slice(0, coachLimits(d).maxMessageLen) : null, nutrition })
 }
-export const localPlan = (S, intake) => start(S, 'create', { intake: intake || null })
-export const localRefine = async (S, text) => {
+export const localPlan = (S, intake, nutrition) => start(S, 'create', { intake: intake || null, nutrition })
+export const localRefine = async (S, text, nutrition) => {
   const d = await loadCoachDevice()
   const pendingCreate = d.pending && d.pending.kind === 'create' ? d.pending : null
-  return start(S, 'create', { refine: String(text || '').slice(0, coachLimits(d).maxMessageLen), previous: pendingCreate?.bundle || null, iteration: (pendingCreate?.iteration || 1) + 1 })
+  return start(S, 'create', { refine: String(text || '').slice(0, coachLimits(d).maxMessageLen), previous: pendingCreate?.bundle || null, iteration: (pendingCreate?.iteration || 1) + 1, nutrition })
 }
-export const localDebrief = (S, workoutId) => start(S, 'debrief', { workoutId: workoutId || null })
-export const localAsk = async (S, text, today) => {
+export const localDebrief = (S, workoutId, nutrition) => start(S, 'debrief', { workoutId: workoutId || null, nutrition })
+export const localAsk = async (S, text, today, nutrition) => {
   const d = await loadCoachDevice()
-  return start(S, 'ask', { note: String(text || '').slice(0, coachLimits(d).maxMessageLen), today: today || null })
+  return start(S, 'ask', { note: String(text || '').slice(0, coachLimits(d).maxMessageLen), today: today || null, nutrition })
 }
 
 // An exercise of the running session, and why it needs a rethink (the `adapt` job).
-export const localAdapt = async (S, { today, entry, reason, text, activeId } = {}) => {
+export const localAdapt = async (S, { today, entry, reason, text, activeId, nutrition } = {}) => {
   const d = await loadCoachDevice()
   return start(S, 'adapt', {
     today: today || null, focus: { entry, reason }, activeId: typeof activeId === 'string' ? activeId : null,
-    note: text ? String(text).slice(0, coachLimits(d).maxMessageLen) : null,
+    note: text ? String(text).slice(0, coachLimits(d).maxMessageLen) : null, nutrition,
   })
 }
 
@@ -144,7 +145,7 @@ export async function localScheduled(S, now = new Date()) {
   if (cap.limit > 0 && cap.used >= cap.limit) return null
   const tz = deviceZone()
   if (!isDue(S.coach, S, wallClock(now), d.reviewedAt || 0, tz)) return null
-  try { return await start(S, 'review', { scheduled: true }) } catch { return null }
+  try { return await start(S, 'review', { scheduled: true, nutrition: nutritionForCoach(S) }) } catch { return null }
 }
 // The phone's own clock, in the shape the server's userNow() hands the tick.
 export function wallClock(now) {
@@ -204,7 +205,7 @@ async function start(S, kind, opts) {
 async function run(S, kind, opts, d, adapter) {
   const key = await getApiKey()
   const payload = payloadLib.build(S, {
-    handle: await handle(), kind, intake: opts.intake, note: opts.note, refine: opts.refine, previous: opts.previous, workoutId: opts.workoutId, today: opts.today, focus: opts.focus,
+    handle: await handle(), kind, intake: opts.intake, note: opts.note, refine: opts.refine, previous: opts.previous, workoutId: opts.workoutId, today: opts.today, focus: opts.focus, nutrition: opts.nutrition || nutritionForCoach(S),
     lang: getLang()   // what the app shows, which a profile that never picked a language does not store (#303)
   })
   const model = d.model || HTTP_PROVIDERS[d.provider].defaultModel

@@ -38,6 +38,8 @@ export const MODULES = [
     desc: 'Weigh-ins, measurements, progress photos and your weight goal.' },
   { id: 'health', group: 'body', icon: 'heart', tint: 'var(--red)', title: 'Health',
     desc: 'Apple Health or Health Connect, heart rate and recovery tips.' },
+  { id: 'nutrition', group: 'body', icon: 'nutrition', tint: 'var(--green)', title: 'Nutrition',
+    desc: 'Calorie and macro tracking, daily food logs and diet consistency.' },
   { id: 'motivation', group: 'extras', icon: 'flame', tint: 'var(--orange)', title: 'Motivation',
     desc: 'Streaks, challenges, badges, recaps and your year in openGym.' },
   { id: 'coach', group: 'extras', icon: 'sparkles', tint: 'var(--green)', title: 'AI Coach',

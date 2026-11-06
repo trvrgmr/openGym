@@ -13,7 +13,7 @@
 // or no never makes it disappear. Turning the Coach off is the admin's decision, not a control
 // on this screen.
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { closeThenNav } from '../lib/nav.js'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
@@ -44,6 +44,7 @@ import '../coach.css'
 
 export default function CoachChat() {
   const nav = useNavigate()
+  const loc = useLocation()
   const S = useStore(s => s.S)
   const user = useStore(s => s.user)
   const config = useStore(s => s.config)
@@ -69,7 +70,7 @@ export default function CoachChat() {
   // before the server said for this session whether it has a Coach (lib/use-coach-gate.js).
   useEffect(() => {
     if (!storeReady || !gate.known) return
-    if (!ok) nav('/home', { replace: true })
+    if (!ok) nav('/coach/setup', { replace: true })
     else if (!ready) nav('/coach/intake', { replace: true })
   }, [storeReady, gate.known, ok, ready])
 
@@ -167,6 +168,23 @@ export default function CoachChat() {
   const askImprove = r => ask(
     () => requestReview(t('Focus only on my routine “{0}”. Improve it: exercise choice, order, sets and reps, rep ranges, progression. Leave the other routines alone.', r.name)),
     t('Improve my routine “{0}”.', r.name))
+  const askPrompt = promptText => ask(() => askCoach(promptText), promptText)
+
+  useEffect(() => {
+    const p = loc.state?.prompt
+    if (p && ready && !job && !busy) {
+      try { nav(".", { replace: true, state: {} }) } catch {}
+      if (p === t("Weekly analysis")) {
+        askPrompt(t("Son 7 günlük kalori ve antrenman performansımı analiz et"))
+      } else if (p === t("Macro status")) {
+        askPrompt(t("Bugünkü makrolarım antrenman hacmime uygun mu?"))
+      } else if (p === t("Ask Coach")) {
+        setExpanded(true)
+      } else {
+        askPrompt(p)
+      }
+    }
+  }, [ready, loc.state?.prompt, !job, busy])
 
   const pickRoutine = () => openSheet(close => <div className="chat-menu">
     <h3>{t('Improve which routine?')}</h3>
@@ -250,6 +268,9 @@ export default function CoachChat() {
         {!!lastWorkout && <button className="qchip" onClick={askDebrief}><Icon name="checkCircle" />{t('Last workout')}</button>}
         {!!(S.routines || []).length && <button className="qchip" onClick={pickRoutine}><Icon name="wrench" />{t('Improve a routine')}</button>}
         {community && <button className="qchip" onClick={showCohort}><Icon name="person" />{t('Compare')}</button>}
+        <button className="qchip" onClick={() => askPrompt(t('Son 7 günlük kalori ve antrenman performansımı analiz et'))}><Icon name="chart" />{t('Son 7 günlük kalori ve antrenman performansımı analiz et')}</button>
+        <button className="qchip" onClick={() => askPrompt(t('Bugünkü makrolarım antrenman hacmime uygun mu?'))}><Icon name="nutrition" />{t('Bugünkü makrolarım antrenman hacmime uygun mu?')}</button>
+        <button className="qchip" onClick={() => askPrompt(t('Güç artışı / toparlanma için beslenmemde neyi düzeltmeliyim?'))}><Icon name="flame" />{t('Güç artışı / toparlanma için beslenmemde neyi düzeltmeliyim?')}</button>
       </div>}
       <div className={'composer-in' + (expanded ? ' tall' : '')}>
         <ChatInput value={text} onChange={setText} onSend={send} placeholder={placeholder} disabled={!!job}
