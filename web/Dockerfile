@@ -58,12 +58,12 @@ ARG VERSION=dev
 ARG VCS_REF=dev
 ARG BUILD_DATE=unknown
 
-LABEL maintainer="Duarte Santos https://github.com/DuarteSantos8" \
+LABEL maintainer="trvrgmr https://github.com/trvrgmr" \
     org.opencontainers.image.title="opengym-web" \
     org.opencontainers.image.description="Frontend for Self-hosted gym & body-weight tracker — plan routines, log workouts (supersets & cardio too), track your weight and progress, passkey login. Your data, your server." \
-    org.opencontainers.image.source="https://github.com/DuarteSantos8/openGym" \
+    org.opencontainers.image.source="https://github.com/trvrgmr/openGym" \
     org.opencontainers.image.url="https://opengym.ch" \
-    org.opencontainers.image.documentation="https://github.com/DuarteSantos8/openGym#readme" \
+    org.opencontainers.image.documentation="https://github.com/trvrgmr/openGym#readme" \
     org.opencontainers.image.licenses="AGPL-3.0-or-later" \
     org.opencontainers.image.version=$VERSION \
     org.opencontainers.image.revision=$VCS_REF \

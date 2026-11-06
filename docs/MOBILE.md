@@ -12,7 +12,7 @@ TestFlight beta) on an iPhone, the APK on Android. Then read
 |---|---|---|
 | **iPhone and iPad** | The [App Store](https://apps.apple.com/app/id6822275400). To test the next version early: the [public TestFlight beta](https://testflight.apple.com/join/RKATb61k) | the App Store or TestFlight |
 | **Apple Watch** | Comes with the iPhone app | with the iPhone app |
-| **Android, APK** | [GitHub release](https://github.com/DuarteSantos8/openGym/releases/latest) or [opengym.ch](https://opengym.ch). From v1.4.2 in three sizes: Standard (animations at 180 px), Plus (240 px) and HD (360 px, the biggest download) | the app itself, each size to its own kind |
+| **Android, APK** | [GitHub release](https://github.com/trvrgmr/openGym/releases/latest) or [opengym.ch](https://opengym.ch). From v1.4.2 in three sizes: Standard (animations at 180 px), Plus (240 px) and HD (360 px, the biggest download) | the app itself, each size to its own kind |
 | **Android, Google Play** | Coming: the account has to run a closed test first | Google Play, sharper animations as downloads |
 
 The APK and the Google Play app are signed with the same key, so a phone can move from one to
@@ -708,7 +708,7 @@ Google Play build come from the same code; how they are built and uploaded is in
 
 ### Android: sideload the APK
 
-Every release has three signed APKs on [the GitHub release](https://github.com/DuarteSantos8/openGym/releases),
+Every release has three signed APKs on [the GitHub release](https://github.com/trvrgmr/openGym/releases),
 each with its `.sha256` beside it, and [opengym.ch](https://opengym.ch) links to all three:
 
 - **`openGym-X.Y.Z.apk` (Standard):** the exercise animations built in at 180 px, about 315 MB.

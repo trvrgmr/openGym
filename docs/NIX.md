@@ -220,7 +220,7 @@ word-for-word.
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # the flake lives in a subdirectory — ?dir= points at it
-    opengym.url = "github:DuarteSantos8/openGym?dir=contrib/nix";
+    opengym.url = "github:trvrgmr/openGym?dir=contrib/nix";
   };
 
   outputs = { self, nixpkgs, opengym, ... }: {

@@ -38,7 +38,7 @@ Clone it somewhere that is **not** iCloud Drive or another synced folder (`~/Dev
 `./data` folder is written all the time and does not like being synced.
 
 ```bash
-git clone https://github.com/DuarteSantos8/openGym ~/Dev/opengym
+git clone https://github.com/trvrgmr/openGym ~/Dev/opengym
 cd ~/Dev/opengym
 cp .env.example .env
 ```

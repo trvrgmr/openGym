@@ -62,5 +62,5 @@ Design notes for specific features, kept next to the code they describe:
 ## Still stuck?
 
 Ask on the [Discord](https://discord.gg/e62jY6fwVb) or in
-[Discussions](https://github.com/DuarteSantos8/openGym/discussions). If something in these docs was
+[Discussions](https://github.com/trvrgmr/openGym/discussions). If something in these docs was
 wrong or missing, that's worth an issue too.

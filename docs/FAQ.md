@@ -30,7 +30,7 @@ offline), or build the app onto your own phone with Xcode; both are in [MOBILE.m
 Not yet, it's next: Google wants a round of closed testing first. Until then the signed APK is the
 way to go. It's published with a `.sha256` next to every release, comes in three sizes (Standard,
 Plus, HD) and updates itself. Get it from the
-[latest release](https://github.com/DuarteSantos8/openGym/releases/latest) or [opengym.ch](https://opengym.ch).
+[latest release](https://github.com/trvrgmr/openGym/releases/latest) or [opengym.ch](https://opengym.ch).
 
 ### Where is my data?
 
@@ -108,5 +108,5 @@ by openGym's license. Anything outside openGym needs your own licence from
 ### Where do I ask something that isn't here?
 
 The [Discord](https://discord.gg/e62jY6fwVb) for a quick answer,
-[Discussions](https://github.com/DuarteSantos8/openGym/discussions) if the next person should be
-able to find it, [Issues](https://github.com/DuarteSantos8/openGym/issues) for a bug.
+[Discussions](https://github.com/trvrgmr/openGym/discussions) if the next person should be
+able to find it, [Issues](https://github.com/trvrgmr/openGym/issues) for a bug.

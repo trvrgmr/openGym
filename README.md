@@ -116,7 +116,7 @@ The full list of what changed release by release is in the [changelog](CHANGELOG
 You need [Docker](https://docs.docker.com/get-docker/) with Compose.
 
 ```bash
-git clone https://github.com/DuarteSantos8/openGym
+git clone https://github.com/trvrgmr/openGym
 cd openGym
 cp .env.example .env
 docker compose pull      # prebuilt images, amd64 + arm64 (skip this to build from source)
@@ -132,8 +132,7 @@ Traefik and nginx, and there are separate guides for
 [HTTPS on a LAN](docs/SELF_HOSTING_HTTPS.md), [a Mac with Tailscale](docs/SELF_HOSTING_MAC.md) and [Kubernetes](docs/SELF_HOSTING_KUBERNETES.md).
 
 > [!NOTE]
-> Images are published from the same tag to `ghcr.io/duartesantos8/opengym-{api,web}`
-> (what `docker-compose.yml` pulls) and `registry.gitlab.com/duartesantos8/opengym/{api,web}`. Swap
+> Images are configured for `ghcr.io/trvrgmr/opengym-{api,web}` (or built locally from source with `docker compose up -d --build`). Swap
 > the `image:` lines if you prefer GitLab's registry, or run `docker compose up -d --build` to build
 > locally. Either way you don't need Node on the host.
 
@@ -181,7 +180,7 @@ the phone, no account) or connect them to your server and sync.
 | | Get it |
 |---|---|
 | **iPhone and iPad**, with the **Apple Watch** app | The [App Store](https://apps.apple.com/app/id6822275400), in every App Store country |
-| **Android** | The signed APK from the [latest release](https://github.com/DuarteSantos8/openGym/releases/latest) or [opengym.ch](https://opengym.ch), in three sizes: **Standard** (`openGym-X.Y.Z.apk`, animations at 180 px, about 315 MB), **Plus** (`openGym-Plus-X.Y.Z.apk`, 240 px, about 424 MB) and **HD** (`openGym-HD-X.Y.Z.apk`, 360 px, about 760 MB). It updates itself and stays the kind you picked |
+| **Android** | The signed APK from the [latest release](https://github.com/trvrgmr/openGym/releases/latest) or [opengym.ch](https://opengym.ch), in three sizes: **Standard** (`openGym-X.Y.Z.apk`, animations at 180 px, about 315 MB), **Plus** (`openGym-Plus-X.Y.Z.apk`, 240 px, about 424 MB) and **HD** (`openGym-HD-X.Y.Z.apk`, 360 px, about 760 MB). It updates itself and stays the kind you picked |
 | **Google Play** | In closed testing: Google wants 12 testers for 14 days before it lets everyone in. Join the [tester group](https://groups.google.com/g/opengym-testers/about), then [opt in](https://play.google.com/apps/testing/ch.duartesantos.opengym). It installs right over the APK and keeps your data |
 | **Wear OS watch** (beta) | Rides along with the Google Play test: once Google's watch review is done, "openGym Beta" shows up in the Play Store on your Galaxy Watch, Pixel Watch and friends. Details: [docs/WEAR_OS.md](docs/WEAR_OS.md) |
 
@@ -264,7 +263,7 @@ The [documentation index](docs/README.md) sorts every guide by who it's for. The
 
 A release roughly every one to two weeks, each one whatever has passed testing by then. The full
 plan is in [ROADMAP.md](ROADMAP.md), and the issues sit in the
-[GitHub milestones](https://github.com/DuarteSantos8/openGym/milestones).
+[GitHub milestones](https://github.com/trvrgmr/openGym/milestones).
 
 | Release | When | Theme |
 |---|---|---|
@@ -282,25 +281,22 @@ plan is in [ROADMAP.md](ROADMAP.md), and the issues sit in the
 
 - **[Discord](https://discord.gg/e62jY6fwVb)** for release announcements, self-hosting help and
   quick back-and-forth. Usually the fastest way to get an answer.
-- **[Discussions](https://github.com/DuarteSantos8/openGym/discussions)** for questions and ideas
+- **[Discussions](https://github.com/trvrgmr/openGym/discussions)** for questions and ideas
   you want the next person to find by searching.
-- **[Issues](https://github.com/DuarteSantos8/openGym/issues)** for reproducible bugs and agreed-on
+- **[Issues](https://github.com/trvrgmr/openGym/issues)** for reproducible bugs and agreed-on
   work. Login trouble is almost always an `RP_ID`/`ORIGIN` mismatch; the
   [self-hosting guide](docs/SELF_HOSTING.md) covers it.
-- **[Pull requests](https://github.com/DuarteSantos8/openGym/pulls)** are welcome; start with
+- **[Pull requests](https://github.com/trvrgmr/openGym/pulls)** are welcome; start with
   [CONTRIBUTING.md](CONTRIBUTING.md).
 
-<a href="https://github.com/DuarteSantos8/openGym/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=DuarteSantos8/openGym&max=60" alt="Contributors">
+<a href="https://github.com/trvrgmr/openGym/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=trvrgmr/openGym&max=60" alt="Contributors">
 </a>
 
 ### Where the code lives
 
-GitHub is the home of the project. [gitlab.com/DuarteSantos8/opengym](https://gitlab.com/DuarteSantos8/opengym)
-is a mirror, updated by a GitHub Actions workflow on every push to `main` and every release tag. It
-exists because its CI builds the multi-arch images and the SBOMs for its registry (the APKs are
-built and signed on the release machine and attached to the GitHub release). Nothing is merged there by hand. In the changelog, `!NN` refers to a GitLab merge request
-from the weeks in August and September 2026 when the project lived there.
+GitHub is the home of this fork: [github.com/trvrgmr/openGym](https://github.com/trvrgmr/openGym).
+All releases, updates, and container builds are tracked on this repository.
 
 ## How openGym is built
 
@@ -324,21 +320,11 @@ What that does and doesn't mean:
 Community pull requests are written by their authors, with whatever tools they like, and reviewed
 the same way.
 
-## Support
+## Star & Contribute
 
-openGym is free and stays free: AGPL, no paid tier, nothing held back for sponsors. If it replaced a
-paid tracker for you and you'd like to chip in, there's Buy Me a Coffee, Ko-fi and GitHub Sponsors
-(the app has the same three under Settings → About & updates, and on the iPhone a shortcut to
-leaving an App Store review). A star, a bug report or a pull request helps just as much.
+openGym is free and open-source: AGPL, no paid tier, no subscriptions. A star on GitHub, a bug report, or a pull request helps keep the project thriving!
 
-<a href="https://buymeacoffee.com/duartesantos" target="_blank">
-  <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60" width="217">
-</a>
-<a href="https://ko-fi.com/opengym" target="_blank"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support openGym on Ko-fi" height="60"></a>
-
-[GitHub Sponsors](https://github.com/sponsors/DuarteSantos8)
-
-[![Star History Chart](https://api.star-history.com/svg?repos=duartesantos8/opengym&type=Date)](https://star-history.com/#DuarteSantos8/openGym&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=trvrgmr/openGym&type=Date)](https://star-history.com/#trvrgmr/openGym&Date)
 
 ## License
 
